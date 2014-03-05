@@ -1,8 +1,12 @@
 <html>
 <head><title>{{ .Title }}</title>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 </head>
 <body>
-<h1>{{ .Title }}</h1>
-{{ .Content }}
+	<div class="blogpost">
+		<h1 class="posttitle">{{ .Title }}</h1>
+		<h2 class="subtitle">{{ .Description }}</h2>
+		{{ .Content }}
+	</div>
 </body>
 </html>

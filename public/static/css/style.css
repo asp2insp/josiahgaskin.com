@@ -1,0 +1,79 @@
+.blogpost {
+	max-width: 700px;
+	color: rgb(51, 51, 50);
+	font-size: 22px;
+	line-height: 33px;
+	margin: 0 auto;
+
+	font-family: "freight-text-pro",Georgia,Cambria,"Times New Roman",Times,serif;
+	letter-spacing: .01rem;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 22px;
+	line-height: 1.5;
+}
+
+.blogpost h1 {
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: -0.04em;
+	font-size: 50px;
+	line-height: 1.1;
+	margin-bottom: 8px;
+	text-align: center;
+}
+
+.blogpost h2.subtitle {
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: -0.02em;
+	font-weight: 300;
+	font-style: normal;
+	font-size: 30px;
+	line-height: 1.1;
+	color: #666665;
+	margin: 0;
+	text-align: center;
+}
+
+.blogpost h3 {
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 24px;
+	line-height: 1.2;
+	margin-bottom: 2px;
+}
+
+.blogpost p {
+	width: 100%;
+	margin-bottom: 30px;
+}
+
+.blogpost pre {
+	background-color: #f8f8f8;
+	border: 1px solid #ddd;
+	font-size: 13px;
+	line-height: 19px;
+	overflow: auto;
+	padding: 6px 20px;
+	border-radius: 3px;
+	margin: 5px 25px;
+}
+
+.blogpost *:not(pre) > code {
+	background-color: #f8f8f8;
+	border: 1px solid #ddd;
+	font-size: 13px;
+	line-height: 19px;
+	overflow: auto;
+	padding: 6px 10px;
+	border-radius: 3px;
+}
+
+.blogpost img {
+	max-height: 300px;
+	margin: 5px auto;
+}
