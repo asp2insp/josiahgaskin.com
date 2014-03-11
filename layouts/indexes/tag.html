@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>{{.Title}}</title>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+</head>
+<body>
+<div class="page-header" style='background-image: url(/static/img/backgrounds/07.jpg)'>
+  <h1 class="title-text">{{ .Title }}</h1>
+</div>
+ {{ template "chrome/postlist.html" . }}
+
+ {{ template "chrome/footer.html" . }}
+<div class="backcontainer">
+  <a href="/blogpost/"><i class="fa fa-chevron-left fa-2x white"></i></a>
+</div>
+</body>

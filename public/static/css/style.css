@@ -1,3 +1,29 @@
+.align-left  {
+  float: left;
+}
+
+.align-right {
+	float: right;
+}
+
+.white {
+	color: #FFF;
+}
+
+div.backcontainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin-top: 10px;
+	margin-left: 10px;
+	line-height: 33px;
+	z-index: 11;
+}
+
+div.backcontainer a:visited {
+	color: #000;
+}
+
 .blogpost {
 	max-width: 700px;
 	color: rgb(51, 51, 50);
@@ -76,4 +102,152 @@
 .blogpost img {
 	max-height: 300px;
 	margin: 5px auto;
+}
+
+.blogpost figure {
+	text-align: center;
+}
+
+.blogpost figcaption {
+	font-family: "freight-text-pro",Georgia,Cambria,"Times New Roman",Times,serif;
+	letter-spacing: .01rem;
+	font-weight: 400;
+	font-style: italic;
+	font-size: 14px;
+	line-height: 1.4;
+	color: #666665;
+	outline: 0;
+	z-index: 300;
+}
+
+.blogpost a.backlink {
+	font-size: 10px;
+	vertical-align: center;
+}
+
+div.top-content {
+	position: absolute;
+	left: 0;
+	right: 0;
+	background-color: #FFF;
+	z-index: 10;
+	margin-bottom: 100px;
+}
+
+div.top-content.header-spaced {
+	top: 260px;
+}
+
+div.postlist-container {
+	max-width: 700px;
+	color: rgb(51, 51, 50);
+	font-size: 22px;
+	line-height: 33px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+ul.postlist a, ul.postlist a:visited {
+	text-decoration: none;
+	color: #000;
+}
+
+ul.postlist h3 {
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	font-style: normal;
+	display: block;
+	font-size: 28px;
+	line-height: 1.1;
+	color: #333332;
+	margin-bottom: 4px;
+}
+
+ul.postlist p.subtitle {
+  font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: -0.02em;
+	font-weight: 300;
+	font-style: normal;
+	font-size: 20px;
+	line-height: 1.2;
+	color: #666665;
+	margin-bottom: 4px;
+	margin-top: 0;
+}
+
+ul.postlist ul.tags > li {
+	display: inline;
+	background-color: rgb(149, 165, 166);
+	box-sizing: border-box;
+	margin-left: 4px;
+	padding: 3px 5px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+ul.postlist ul.tags > li > a {
+	color: #FFF;
+	font-family: sans-serif;
+	font-size: 15px;
+	font-weight: 200;
+}
+
+
+div.page-header {
+	position: absolute;
+	width: 100%;
+	height: 250px;
+	pointer-events: none;
+	text-align: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	margin: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 9;
+}
+
+div.page-header h1.title-text {
+	margin-top: 100px;
+	vertical-align: center;
+	color: #FFF;
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 50px;
+	line-height: 1;
+	margin-bottom: 8px;
+	outline: 0;
+	word-break: break-word;
+}
+
+div.footer-container {
+	bottom: 0px;
+	left: 0px;
+	padding: 10px 0px;
+	position: fixed;
+	width: 100%;
+	font-size: 14px;
+	z-index: 9;
+	background-color: #000;
+	text-align: center;
+	color: #FFF;
+}
+
+div.footer-container div.copyright {
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	font-weight: 700;
+	font-style: normal;
+	color: #ddd;
+}
+
+div.footer-container div.link-row a,
+div.footer-container div.link-row a:visited {
+	color: #FFF;
+	text-decoration: none;
+	margin: 0 5em;
 }

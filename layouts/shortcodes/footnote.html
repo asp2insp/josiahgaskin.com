@@ -1,0 +1,9 @@
+<!-- footnote -->
+<a name="backlink-{{ .Get 0 }}"></a><sup><a href="#footnote-{{ .Get 0 }}">{{ .Get 0 }}</a></sup>
+<div class="footnote-content" data-ord="{{ .Get 0 }}">
+  <a name="footnote-{{ .Get 0 }}"></a>
+  <a class="backlink" href="#backlink-{{ .Get 0 }}"><i class="fa fa-reply fa-1"></i></a>
+  {{ .Get 0 }}.
+  {{ .Inner }}
+</div>
+<!-- footnote -->

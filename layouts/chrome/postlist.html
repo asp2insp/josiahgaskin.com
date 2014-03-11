@@ -1,0 +1,17 @@
+<div class="top-content header-spaced">
+  <div class="postlist-container">
+    <ul class="postlist">
+    {{range .Data.Pages}}
+        <li>
+          <h3><a href="{{.Permalink}}">{{.Title}}</a></h3>
+          <p class="subtitle">{{.Description}}</p>
+          <ul class="tags">
+              {{ range .Params.tags }}
+                <li> <a href="/tags/{{ . | urlize }}">#{{ . }}</a> </li>
+              {{ end }}
+          </ul>
+        </li>
+    {{end}}
+    </ul>
+  </div>
+</div>

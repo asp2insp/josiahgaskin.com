@@ -1,15 +1,14 @@
 <html>
 <head>
 <title>{{.Title}}</title>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
 </head>
 <body>
-<h1>{{.Title}}</h1>
-<ul>
-{{range .Data.Pages}}
-		<li>
-		<a href="{{.Permalink}}">{{.Title}}</a>
-		<p>{{.Description}}</p>
-		</li>
-{{end}}
-</ul>
+<div class="page-header" style='background-image: url(/static/img/backgrounds/04.jpg)'>
+	<h1 class="title-text">{{ .Title }}</h1>
+</div>
+{{ template "chrome/postlist.html" . }}
+
+{{ template "chrome/footer.html" . }}
 </body>

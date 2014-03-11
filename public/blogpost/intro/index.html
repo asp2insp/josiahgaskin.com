@@ -1,37 +1,66 @@
 <html>
 <head><title>Roadmap</title>
 <link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/font-awesome.min.css">
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="http://localhost:1313/static/js/blogpost.js"></script>
 </head>
 <body>
+<div class="top-content">
 	<div class="blogpost">
 		<h1 class="posttitle">Roadmap</h1>
 		<h2 class="subtitle">An overview of what has gone into making this site and a peek at the future.</h2>
-		<h3>TODOS (In no particular order)</h3>
+		
+
+<h3 id="toc_0">TODOS (In no particular order)</h3>
 
 <ul>
 <li>I want the ability to have footnotes which appear as hovers on desktop, but as jump-tos on mobile with jumpback links.</li>
-<li>I want a nice centered blog style which is very responsive</li>
+<li><s>I want a nice centered blog style which is very responsive</s></li>
 <li>I want nice header images</li>
 <li>I want side-bar descriptions of inline images</li>
 <li>I want better handling of code blocks
 
 <ul>
-<li>Nice background and full width blocks at the very least</li>
+<li><s>Nice background and full width blocks at the very least</s></li>
 <li>Syntax highlighting</li>
 </ul></li>
+<li><s>Chrome footer</s></li>
+<li><s>Tags</s></li>
 </ul>
 
-<h3>TODOS for Hugoadmin</h3>
+<h3 id="toc_1">TODOS for Hugoadmin</h3>
 
 <p>I&rsquo;m developing a companion app in Go, which I&rsquo;m provisionally calling <code>hugoadmin</code>
   the goal of this tool is to help rapidly create Hugo-compatible folder layouts.</p>
 
 <ul>
-<li><del>Write a <code>createproject</code> command to lay out the basic skeleton of a site.</del></li>
-<li><del>Write a <code>createtype</code> command to insert a new content type into an existing site.</del></li>
+<li><s>Write a <code>createproject</code> command to lay out the basic skeleton of a site.</s></li>
+<li><s>Write a <code>createtype</code> command to insert a new content type into an existing site.</s></li>
+<li>Write an <code>createindex</code> command to insert new indexes</li>
 <li>Come up with more features as I find a need for them</li>
 </ul>
 
+		<div class="footnote-container"></div>
 	</div>
+</div>
+<div class="footer-container">
+  <div class="link-row">
+    <a href="https://plus.google.com/u/0/115428782794411566076/posts">
+      <i class="fa fa-google-plus fa-3x"></i>
+    </a>
+    <a href="https://www.linkedin.com/pub/josiah-gaskin/31/209/549/">
+      <i class="fa fa-linkedin fa-3x"></i>
+    </a>
+    <a href="https://github.com/ca-geo">
+      <i class="fa fa-github fa-3x"></i>
+    </a>
+  </div>
+  <div class="copyright">Copyright Josiah Gaskin 2014</div>
+</div>
+
+<div class="backcontainer">
+	<a href="http://localhost:1313/blogpost/"><i class="fa fa-chevron-left fa-2x"></i></a>
+</div>
 </body>
 </html>

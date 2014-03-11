@@ -1,12 +1,18 @@
 <html>
 <head><title>Splay Tree Encryption</title>
 <link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/font-awesome.min.css">
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="http://localhost:1313/static/js/blogpost.js"></script>
 </head>
 <body>
+<div class="top-content">
 	<div class="blogpost">
 		<h1 class="posttitle">Splay Tree Encryption</h1>
 		<h2 class="subtitle">Musings on building an encryption protocol for asynchronous messaging using splay trees.</h2>
-		<h2>Keys</h2>
+		
+
+<h2 id="toc_0">Keys</h2>
 
 <p>The big idea: Key rachet system with immediate racheting. This works well since keys are very ephemeral, they only stay in memory for the time necessary for one message.</p>
 
@@ -30,6 +36,26 @@
 
 <p>after every set of N messages so that if one of the N messages gets dropped, we can recover it easily. The drawback to this approach is it requires out-of-order evaluation which is not possible in the basic splay tree model.</p>
 
+		<div class="footnote-container"></div>
 	</div>
+</div>
+<div class="footer-container">
+  <div class="link-row">
+    <a href="https://plus.google.com/u/0/115428782794411566076/posts">
+      <i class="fa fa-google-plus fa-3x"></i>
+    </a>
+    <a href="https://www.linkedin.com/pub/josiah-gaskin/31/209/549/">
+      <i class="fa fa-linkedin fa-3x"></i>
+    </a>
+    <a href="https://github.com/ca-geo">
+      <i class="fa fa-github fa-3x"></i>
+    </a>
+  </div>
+  <div class="copyright">Copyright Josiah Gaskin 2014</div>
+</div>
+
+<div class="backcontainer">
+	<a href="http://localhost:1313/blogpost/"><i class="fa fa-chevron-left fa-2x"></i></a>
+</div>
 </body>
 </html>
