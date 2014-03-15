@@ -20,6 +20,8 @@ published: true
   * Syntax highlighting
  * ~~Chrome footer~~
  * ~~Tags~~
+ * ~~Header for common includes~~
+ * ~~Photo Carousel~~
 
 ### TODOS for Hugoadmin
   I'm developing a companion app in Go, which I'm provisionally calling `hugoadmin`

@@ -1,5 +1,5 @@
 <html>
-<head><title>hugoadmin (For Lack of a Better Name)</title>
+<head><title>Time Tracker</title>
 <link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/style.css">
 <link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/responsiveslides.css">
@@ -9,11 +9,13 @@
 <body>
 <div class="top-content">
 	<div class="blogpost">
-		<h1 class="posttitle">hugoadmin (For Lack of a Better Name)</h1>
-		<h2 class="subtitle">A companion tool to Hugo (by spf13) which helps create projects/types</h2>
+		<h1 class="posttitle">Time Tracker</h1>
+		<h2 class="subtitle">A SaaS offering for businesses who bill clients by the hour for a variety of services.</h2>
 		
 
-<h2 id="toc_0">Motivation</h2>
+<h2 id="toc_0">Overview</h2>
+
+<h2 id="toc_1">Problem Description</h2>
 
 <p>Hugo (<a href="https://www.github.com/spf13/hugo">https://www.github.com/spf13/hugo</a>) is a static site generator written in Go. It&rsquo;s super fast and fairly flexible. I&rsquo;ve really enjoyed using it to build this site.</p>
 
@@ -21,16 +23,32 @@
 This project aims to provide a small helper tool that will help you through creating the initial project structure as
 well as project types. It&rsquo;s modelled after django-admin.</p>
 
-<h2 id="toc_1">Implementation</h2>
+<h2 id="toc_2">Existing Solutions</h2>
 
-<p>hugoadmin is written in Go using Cobra (<a href="https://www.github.com/spf13/cobra">https://www.github.com/spf13/cobra</a>).</p>
+<p>TODO: Fill this in</p>
 
-<h2 id="toc_2">Usage</h2>
+<h2 id="toc_3">Time Tracker (or why I&rsquo;m re-inventing the wheel)</h2>
 
-<ul>
-<li><code>hugoadmin createproject new-project-name</code> creates an initial project.</li>
-<li>(Within an existing project) <code>hugoadmin createtype new-type-name</code> creates a new content type.</li>
-</ul>
+<p>Why is this better? Good question.</p>
+
+<h2 id="toc_4">Implementation</h2>
+
+<p>Time Tracker is built in several pieces.</p>
+
+<ol>
+<li>A core API which manages records and provides endpoints for lookup and manipulation</li>
+<li>A desktop web client</li>
+<li>(Future Planning) A native Android app</li>
+<li>(Future Planning) A native iOS app</li>
+</ol>
+
+<p>All of these first party clients are clients of the same API that is exposed publicly. The API speaks JSON.</p>
+
+<p>This core API is built on Google AppEngine and written in Go. The web client is also served from an AppEngine module, but mostly consists of static files and thus may be served by any web framework with URL routing. It is built using HTML5/CSS3/JQuery and utilizes the Semantic-UI frontend framework.</p>
+
+<h2 id="toc_5">Documentation</h2>
+
+<h3 id="toc_6">API</h3>
 
 		<div class="footnote-container"></div>
 	</div>

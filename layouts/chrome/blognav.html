@@ -3,11 +3,11 @@
 </div>
 
 <div class="align-left blog-navigation">
-  {{if .Next}}<a class="nav-arrow" href="{{.Next.Permalink}}">
-    <i class="fa fa-arrow-circle-left fa-2x"></i> {{.Next.Title}}</a>{{end}}
+  {{if .Next}}{{if .Next.Params.published}}<a class="nav-arrow" href="{{.Next.Permalink}}">
+    <i class="fa fa-arrow-circle-left fa-2x"></i> {{.Next.Title}}</a>{{end}}{{end}}
 </div>
 
 <div class="align-right blog-navigation">
-  {{if .Prev}}<a class="nav-arrow" href="{{.Prev.Permalink}}">{{.Prev.Title}}
-    <i class="fa fa-arrow-circle-right fa-2x"></i></a>{{end}}
+  {{if .Prev}}{{if .Prev.Params.published}}<a class="nav-arrow" href="{{.Prev.Permalink}}">{{.Prev.Title}}
+    <i class="fa fa-arrow-circle-right fa-2x"></i></a>{{end}}{{end}}
 </div>
