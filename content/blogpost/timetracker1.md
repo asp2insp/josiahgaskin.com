@@ -107,3 +107,9 @@ This requires that the employee or office manager be logged in, so there is some
 The prototype for this screen can be found on codepen: http://codepen.io/ca-geo/pen/jbmLF. It was built with JQuery and Semantic-UI.{{% footnote 1 %}}http://semantic-ui.com/{{% /footnote %}}
 
 {{% responsiveslides /static/img/timetracker/NewSessionPrototype.png /static/img/timetracker/NewSessionPrototypeDropdown.png /static/img/timetracker/NewSessionPrototypeCalendar.png %}}
+
+### Admin Overview
+
+### Quarterly/Annual Profit/Loss
+
+### Workflow

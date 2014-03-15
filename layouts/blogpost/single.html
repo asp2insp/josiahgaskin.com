@@ -9,7 +9,9 @@
 		<h1 class="posttitle">{{ .Title }}</h1>
 		<h2 class="subtitle">{{ .Description }}</h2>
 		{{ .Content }}
-		<div class="footnote-container"></div>
+		<div class="footnote-container">
+			<h2 class="subtitle">Footnotes</h2>
+		</div>
 	</div>
 	{{ template "chrome/blognav.html" . }}
 </div>
