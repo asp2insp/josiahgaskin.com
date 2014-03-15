@@ -1,8 +1,22 @@
 <html>
 <head><title>{{ .Title }}</title>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script src="/static/js/blogpost.js"></script>
 </head>
 <body>
-<h1>{{ .Title }}</h1>
-{{ .Content }}
+<div class="top-content">
+	<div class="blogpost">
+		<h1 class="posttitle">{{ .Title }}</h1>
+		<h2 class="subtitle">{{ .Description }}</h2>
+		{{ .Content }}
+		<div class="footnote-container"></div>
+	</div>
+</div>
+{{ template "chrome/footer.html" . }}
+<div class="backcontainer">
+	<a href="/project/"><i class="fa fa-chevron-left fa-2x"></i></a>
+</div>
 </body>
 </html>
