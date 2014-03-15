@@ -5,11 +5,7 @@
         <li>
           <h3><a href="{{.Permalink}}">{{.Title}}</a></h3>
           <p class="subtitle">{{.Description}}</p>
-          <ul class="tags">
-              {{ range .Params.tags }}
-                <li> <a href="/tags/{{ . | urlize }}">#{{ . }}</a> </li>
-              {{ end }}
-          </ul>
+          {{ template "chrome/tags.html" . }}
         </li>
     {{end}}
     </ul>

@@ -6,8 +6,69 @@
 	float: right;
 }
 
-.white {
+.top {
+	position: absolute;
+	top: 1em;
+}
+
+.right {
+	position: absolute;
+	right: 0.5em;
+}
+
+.inline, ul.inline > li {
+	display: inline;
+}
+
+.centered {
+	margin-left: auto;
+	margin-right: auto;
+	width: intrinsic;			/* Safari/WebKit uses a non-standard name */
+	width: -moz-max-content;	/* Firefox/Gecko */
+}
+
+.white, a.white:visited {
 	color: #FFF;
+	border-color: #FFF;
+}
+
+.medium {
+	font-size: 20px;
+}
+
+.large {
+	font-size: 30px;
+}
+
+ul.menu > li {
+	margin-right: 2.5em;
+}
+
+a.plain, a.plain:visited {
+	text-decoration: none;
+	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
+	letter-spacing: 0.01em;
+	font-weight: 500;
+	font-style: normal;
+	line-height: 1.1;
+}
+
+a.plain:hover {
+	border-bottom: 1px solid;
+}
+
+div.fullscreen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	margin-bottom: 5em;
+	z-index: 10;
+	-webkit-background-size: cover; /* For WebKit*/
+	-moz-background-size: cover;    /* Mozilla*/
+	-o-background-size: cover;      /* Opera*/
+	background-size: cover;         /* Generic*/
 }
 
 div.backcontainer {
@@ -20,6 +81,19 @@ div.backcontainer {
 	z-index: 11;
 }
 
+div.blog-navigation {
+	padding: 0.5em;
+}
+
+a.nav-arrow {
+	text-decoration: none;
+}
+
+a.nav-arrow > i {
+	vertical-align: middle;
+}
+
+a.nav-arrow:visited,
 div.backcontainer a:visited {
 	color: #000;
 }
@@ -131,7 +205,7 @@ div.top-content {
 	right: 0;
 	background-color: #FFF;
 	z-index: 10;
-	margin-bottom: 100px;
+	margin-bottom: 5em;
 }
 
 div.top-content.header-spaced {
@@ -176,7 +250,7 @@ ul.postlist p.subtitle {
 	margin-top: 0;
 }
 
-ul.postlist ul.tags > li {
+ul.tags > li {
 	display: inline;
 	background-color: rgb(149, 165, 166);
 	box-sizing: border-box;
@@ -187,11 +261,13 @@ ul.postlist ul.tags > li {
 	border-radius: 4px;
 }
 
-ul.postlist ul.tags > li > a {
+ul.tags > li > a:visited,
+ul.tags > li > a {
 	color: #FFF;
 	font-family: sans-serif;
 	font-size: 15px;
 	font-weight: 200;
+	text-decoration: none;
 }
 
 
@@ -210,9 +286,12 @@ div.page-header {
 	z-index: 9;
 }
 
+div.page-header.short {
+	height: 125px;
+}
+
 div.page-header h1.title-text {
-	margin-top: 100px;
-	vertical-align: center;
+	vertical-align: middle;
 	color: #FFF;
 	font-family: "jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
 	letter-spacing: -0.02em;
