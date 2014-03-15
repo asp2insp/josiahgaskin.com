@@ -2,11 +2,13 @@
   <div class="postlist-container">
     <ul class="postlist">
     {{range .Data.Pages}}
+      {{ if .Params.published }}
         <li>
           <h3><a href="{{.Permalink}}">{{.Title}}</a></h3>
           <p class="subtitle">{{.Description}}</p>
           {{ template "chrome/tags.html" . }}
         </li>
+      {{end}}
     {{end}}
     </ul>
   </div>

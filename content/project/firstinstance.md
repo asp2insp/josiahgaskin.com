@@ -6,6 +6,7 @@ aliases: []
 linktitle: "first-of-project"
 groups: ['projects']
 groups_weight: 1
+published: false
 ---
 
 This is the first instance of project. Isn't it awesome?
