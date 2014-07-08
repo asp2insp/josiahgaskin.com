@@ -1,0 +1,23 @@
+<!-- codeblock -->
+{{ if .Get "previewImage" }}
+<div class="ui tabular menu">
+<a class="active green item" data-tab="code">Code</a>
+<a class="blue item" data-tab="preview">Preview</a>
+</div>
+<div class="ui active tab segment codeblocktab" data-tab="code">
+<pre class="codeblock">
+{{ .Inner }}
+</pre>
+</div>
+{{ with .Get "previewImage" }}
+<div class="ui tab segment codeblocktab" data-tab="preview">
+<img src="{{ . }}">
+</div>
+{{ end }}
+{{ else }}
+<pre class="codeblock">
+{{ .Inner }}
+</pre>
+{{ end }}
+
+<!-- codeblock -->
