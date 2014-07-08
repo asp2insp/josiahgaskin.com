@@ -1,11 +1,55 @@
 <html>
 <head><title>Starting Time Tracker</title>
-<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/style.css">
-<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/responsiveslides.css">
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-<script src="http://localhost:1313/static/js/responsiveslides.min.js"></script>
-<script src="http://localhost:1313/static/js/blogpost.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.bxslider.css">
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/static/css/github.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css"/>
+
+<script type="text/javascript" src="/static/js/jquery.fancybox.js?v=2.1.5"></script>
+<script src="/static/js/jquery.bxslider.js"></script>
+<script src="/static/js/highlight.pack.js"></script>
+<script src="/static/js/semantic.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.address.js"></script>
+<script>
+(function ($) {
+    $.fn.classes = function (callback) {
+        var classes = [];
+        $.each(this, function (i, v) {
+            var splitClassName = v.className.split(/\s+/);
+            for (var j in splitClassName) {
+                var className = splitClassName[j];
+                if (-1 === classes.indexOf(className)) {
+                    classes.push(className);
+                }
+            }
+        });
+        if ('function' === typeof callback) {
+            for (var i in classes) {
+                callback(classes[i]);
+            }
+        }
+        return classes;
+    };
+    String.prototype.startsWith = function(prefix) {
+    	return this.substring(0, prefix.length) === prefix;
+    }
+})(jQuery);
+$(document).ready(function(){
+  $('.rslides').bxSlider({
+  	adaptiveHeight: true
+  });
+  $('.rslides > li > a').fancybox();
+  $(".footnote-content").appendTo(".footnote-container");
+  $('pre.codeblock').each(function(i, e) {
+  	hljs.highlightBlock(e);
+  });
+  $('.tabular.menu > .item').tab();
+});
+</script>
 </head>
 <body>
 <div class="top-content">
@@ -37,63 +81,79 @@ even if they aren&rsquo;t paying you.</p>
 
 <h4 id="toc_3">Employee:</h4>
 
-<pre><code>{
-    Name: &quot;Jane Daw&quot;,
-    Phone: &quot;###-###-####&quot;,
-    Email: &quot;janedaw@service.com&quot;,
+<pre class="codeblock">
+
+{
+    Name: "Jane Daw",
+    Phone: "###-###-####",
+    Email: "janedaw@service.com",
     BonusPayItems: [
-        &quot;Holiday Bonus&quot;: 1000,
+        "Holiday Bonus": 1000,
     ],
 }
-</code></pre>
+
+</pre>
 
 <h4 id="toc_4">Client:</h4>
 
-<pre><code>{
-    Name: &quot;John Doe&quot;,
-    Phone: &quot;###-###-####&quot;,
-    Email: &quot;johndoe@example.com&quot;,
+<pre class="codeblock">
+
+{
+    Name: "John Doe",
+    Phone: "###-###-####",
+    Email: "johndoe@example.com",
     BillingRates {
-        &quot;JaneDaw/APBiology&quot;: 80,
-        &quot;JaneDaw/APPhysics&quot;: 100,
-        &quot;TedSmith/Writing&quot;: 75,
+        "JaneDaw/APBiology": 80,
+        "JaneDaw/APPhysics": 100,
+        "TedSmith/Writing": 75,
     },
 }
-</code></pre>
+
+</pre>
 
 <h4 id="toc_5">Session:</h4>
 
-<pre><code>{
-    _Parent: *Client{&quot;John Doe&quot;},
+<pre class="codeblock">
+
+{
+    _Parent: *Client{"John Doe"},
     Date: 01/31/2014,
-    Employee: *Employee{&quot;Jane Daw&quot;},
-    SessionType: &quot;APBiology&quot;,
-    Notes: &quot;Cell Mitosis/Meiosis&quot;,
+    Hours: 1,
+    Employee: *Employee{"Jane Daw"},
+    SessionType: "APBiology",
+    Notes: "Cell Mitosis/Meiosis",
     BonusPayItems: [],
 }
-</code></pre>
+
+</pre>
 
 <h4 id="toc_6">Employee Pay Stub:</h4>
 
-<pre><code>{
-    _Parent: *Employee{&quot;Jane Daw&quot;},
+<pre class="codeblock">
+
+{
+    _Parent: *Employee{"Jane Daw"},
     Date: 01/31/2014,
     Amount: 5400,
     CheckNumber: 9999,
-    Memo: &quot;&quot;,
+    Memo: "",
 }
-</code></pre>
+
+</pre>
 
 <h4 id="toc_7">Client Pay Receipt</h4>
 
-<pre><code>{
-    _Parent: *Client{&quot;John Doe&quot;},
+<pre class="codeblock">
+
+{
+    _Parent: *Client{"John Doe"},
     Date: 01/31/2014,
     Amount: 600,
     CheckNumber: 55555,
-    Memo: &quot;&quot;,
+    Memo: "",
 }
-</code></pre>
+
+</pre>
 
 <h3 id="toc_8">Session Recording Screen</h3>
 
@@ -115,20 +175,22 @@ even if they aren&rsquo;t paying you.</p>
 <div class="slideshow-container">
 <ul class="rslides">
   
-    <li><img src="http://localhost:1313/static/img/timetracker/NewSessionPrototype.png" alt=""></li>
+    <li><a href="/static/img/timetracker/NewSessionPrototype.png" rel="group"><img src="/static/img/timetracker/NewSessionPrototype.png" alt=""></a></li>
   
-    <li><img src="http://localhost:1313/static/img/timetracker/NewSessionPrototypeDropdown.png" alt=""></li>
+    <li><a href="/static/img/timetracker/NewSessionPrototypeDropdown.png" rel="group"><img src="/static/img/timetracker/NewSessionPrototypeDropdown.png" alt=""></a></li>
   
-    <li><img src="http://localhost:1313/static/img/timetracker/NewSessionPrototypeCalendar.png" alt=""></li>
+    <li><a href="/static/img/timetracker/NewSessionPrototypeCalendar.png" rel="group"><img src="/static/img/timetracker/NewSessionPrototypeCalendar.png" alt=""></a></li>
   
 </ul>
 </div>
 
-<h3 id="toc_10">Admin Overview</h3>
+<h3 id="toc_10">Next up:</h3>
 
-<h3 id="toc_11">Quarterly/Annual Profit/Loss</h3>
-
-<h3 id="toc_12">Workflow</h3>
+<ul>
+<li>Prototype Admin Overview</li>
+<li>Prototype Quarterly/Annual Profit/Loss</li>
+<li>Write about the Workflow</li>
+</ul>
 
 		<div class="footnote-container">
 			<h2 class="subtitle">Footnotes</h2>
@@ -137,21 +199,22 @@ even if they aren&rsquo;t paying you.</p>
 	<div class="centered">
   <ul class="tags">
     
-      <li> <a href="http://localhost:1313/tags/projects">#projects</a> </li>
+      <li> <a href="/tags/projects">#projects</a> </li>
     
-      <li> <a href="http://localhost:1313/tags/timetracker">#timetracker</a> </li>
+      <li> <a href="/tags/timetracker">#timetracker</a> </li>
     
 </ul>
 
 </div>
 
 <div class="align-left blog-navigation">
-  <a class="nav-arrow" href="http://localhost:1313/project/hugoadmin">
-    <i class="fa fa-arrow-circle-left fa-2x"></i> hugoadmin (For Lack of a Better Name)</a>
+  <a class="nav-arrow" href="http://localhost:1313/project/timetracker">
+    <i class="fa fa-arrow-circle-left fa-2x"></i> Time Tracker</a>
 </div>
 
 <div class="align-right blog-navigation">
-  
+  <a class="nav-arrow" href="http://localhost:1313/blogpost/timetracker2">On Second Thoughts and Tables
+    <i class="fa fa-arrow-circle-right fa-2x"></i></a>
 </div>
 
 </div>
@@ -173,11 +236,14 @@ even if they aren&rsquo;t paying you.</p>
       <i class="fa fa-envelope fa-3x"></i>
     </a>
   </div>
-  <div class="copyright">Copyright Josiah Gaskin 2014</div>
+  <div class="copyright">Copyright Josiah Gaskin 2014. All content licensed under <a href="http://www.wtfpl.net/">WTFPL</a></div>
 </div>
 
 <div class="backcontainer">
-	<a href="http://localhost:1313/blogpost/"><i class="fa fa-chevron-left fa-2x"></i></a>
+	<a href="/blogpost/"><i class="fa fa-chevron-left fa-2x"></i></a>
 </div>
-</body>
+<script>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
 </html>

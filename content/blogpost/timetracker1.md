@@ -32,7 +32,7 @@ Each data item is assumed to have a GUID and a link to a parent object. This mir
 
 #### Employee:
 
-```
+{{% codeblockwithsyntax %}}
 {
 	Name: "Jane Daw",
 	Phone: "###-###-####",
@@ -41,11 +41,11 @@ Each data item is assumed to have a GUID and a link to a parent object. This mir
 		"Holiday Bonus": 1000,
 	],
 }
-```
+{{% /codeblockwithsyntax %}}
 
 #### Client:
 
-```
+{{% codeblockwithsyntax %}}
 {
 	Name: "John Doe",
 	Phone: "###-###-####",
@@ -56,25 +56,26 @@ Each data item is assumed to have a GUID and a link to a parent object. This mir
 		"TedSmith/Writing": 75,
 	},
 }
-```
+{{% /codeblockwithsyntax %}}
 
 
 #### Session:
 
-```
+{{% codeblockwithsyntax %}}
 {
 	_Parent: *Client{"John Doe"},
 	Date: 01/31/2014,
+	Hours: 1,
 	Employee: *Employee{"Jane Daw"},
 	SessionType: "APBiology",
 	Notes: "Cell Mitosis/Meiosis",
 	BonusPayItems: [],
 }
-```
+{{% /codeblockwithsyntax %}}
 
 #### Employee Pay Stub:
 
-```
+{{% codeblockwithsyntax %}}
 {
 	_Parent: *Employee{"Jane Daw"},
 	Date: 01/31/2014,
@@ -82,11 +83,11 @@ Each data item is assumed to have a GUID and a link to a parent object. This mir
 	CheckNumber: 9999,
 	Memo: "",
 }
-```
+{{% /codeblockwithsyntax %}}
 
 #### Client Pay Receipt
 
-```
+{{% codeblockwithsyntax %}}
 {
 	_Parent: *Client{"John Doe"},
 	Date: 01/31/2014,
@@ -94,7 +95,7 @@ Each data item is assumed to have a GUID and a link to a parent object. This mir
 	CheckNumber: 55555,
 	Memo: "",
 }
-```
+{{% /codeblockwithsyntax %}}
 
 ### Session Recording Screen
 
@@ -108,8 +109,8 @@ The prototype for this screen can be found on codepen: http://codepen.io/ca-geo/
 
 {{% responsiveslides /static/img/timetracker/NewSessionPrototype.png /static/img/timetracker/NewSessionPrototypeDropdown.png /static/img/timetracker/NewSessionPrototypeCalendar.png %}}
 
-### Admin Overview
 
-### Quarterly/Annual Profit/Loss
-
-### Workflow
+### Next up: 
+ * Prototype Admin Overview
+ * Prototype Quarterly/Annual Profit/Loss
+ * Write about the Workflow

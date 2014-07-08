@@ -31,6 +31,6 @@ We could also publish MACs like OTR does in order to improve deniability.
 
 Forward Error Correction could really help with dropped messages. We can calculate
 
-```FEC = XOR(M1, M2, ..., MN)```
+`FEC = XOR(M1, M2, ..., MN)`
 
 after every set of N messages so that if one of the N messages gets dropped, we can recover it easily. The drawback to this approach is it requires out-of-order evaluation which is not possible in the basic splay tree model.

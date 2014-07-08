@@ -17,7 +17,7 @@ published: true
  * I want side-bar descriptions of inline images
  * I want better handling of code blocks
   * ~~Nice background and full width blocks at the very least~~
-  * Syntax highlighting
+  * Syntax codeblockwithsyntaxing
  * ~~Chrome footer~~
  * ~~Tags~~
  * ~~Header for common includes~~

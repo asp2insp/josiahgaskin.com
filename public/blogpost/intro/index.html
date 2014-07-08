@@ -1,11 +1,55 @@
 <html>
 <head><title>Roadmap</title>
-<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/style.css">
-<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="http://localhost:1313/static/css/responsiveslides.css">
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-<script src="http://localhost:1313/static/js/responsiveslides.min.js"></script>
-<script src="http://localhost:1313/static/js/blogpost.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.bxslider.css">
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/static/css/github.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css"/>
+
+<script type="text/javascript" src="/static/js/jquery.fancybox.js?v=2.1.5"></script>
+<script src="/static/js/jquery.bxslider.js"></script>
+<script src="/static/js/highlight.pack.js"></script>
+<script src="/static/js/semantic.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.address.js"></script>
+<script>
+(function ($) {
+    $.fn.classes = function (callback) {
+        var classes = [];
+        $.each(this, function (i, v) {
+            var splitClassName = v.className.split(/\s+/);
+            for (var j in splitClassName) {
+                var className = splitClassName[j];
+                if (-1 === classes.indexOf(className)) {
+                    classes.push(className);
+                }
+            }
+        });
+        if ('function' === typeof callback) {
+            for (var i in classes) {
+                callback(classes[i]);
+            }
+        }
+        return classes;
+    };
+    String.prototype.startsWith = function(prefix) {
+    	return this.substring(0, prefix.length) === prefix;
+    }
+})(jQuery);
+$(document).ready(function(){
+  $('.rslides').bxSlider({
+  	adaptiveHeight: true
+  });
+  $('.rslides > li > a').fancybox();
+  $(".footnote-content").appendTo(".footnote-container");
+  $('pre.codeblock').each(function(i, e) {
+  	hljs.highlightBlock(e);
+  });
+  $('.tabular.menu > .item').tab();
+});
+</script>
 </head>
 <body>
 <div class="top-content">
@@ -25,7 +69,7 @@
 
 <ul>
 <li><s>Nice background and full width blocks at the very least</s></li>
-<li>Syntax highlighting</li>
+<li>Syntax codeblockwithsyntaxing</li>
 </ul></li>
 <li><s>Chrome footer</s></li>
 <li><s>Tags</s></li>
@@ -52,9 +96,9 @@
 	<div class="centered">
   <ul class="tags">
     
-      <li> <a href="http://localhost:1313/tags/site-development">#site-development</a> </li>
+      <li> <a href="/tags/site-development">#site-development</a> </li>
     
-      <li> <a href="http://localhost:1313/tags/personal">#personal</a> </li>
+      <li> <a href="/tags/personal">#personal</a> </li>
     
 </ul>
 
@@ -87,11 +131,14 @@
       <i class="fa fa-envelope fa-3x"></i>
     </a>
   </div>
-  <div class="copyright">Copyright Josiah Gaskin 2014</div>
+  <div class="copyright">Copyright Josiah Gaskin 2014. All content licensed under <a href="http://www.wtfpl.net/">WTFPL</a></div>
 </div>
 
 <div class="backcontainer">
-	<a href="http://localhost:1313/blogpost/"><i class="fa fa-chevron-left fa-2x"></i></a>
+	<a href="/blogpost/"><i class="fa fa-chevron-left fa-2x"></i></a>
 </div>
-</body>
+<script>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script></body>
 </html>

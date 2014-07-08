@@ -37,18 +37,18 @@ of Atom for the past 30 minutes and I'm enjoying myself thus far.
   * Ah, got an example. Define a CSS rule, enter the {} and then hit return.
     Rather than creating:
 
-    ```CSS
+    {{% codeblockwithsyntax %}}
     h1 {
       |
     }
-    ```
+    {{% /codeblockwithsyntax %}}
 
     Atom does this:
 
-    ```CSS
+    {{% codeblockwithsyntax %}}
     h1 {
     |}
-    ```
+    {{% /codeblockwithsyntax %}}
 
     (imagine the pipe is your final cursor position)
  * No auto-suggest for CSS attributes.

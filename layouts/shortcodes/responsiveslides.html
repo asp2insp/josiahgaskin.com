@@ -1,7 +1,7 @@
 <div class="slideshow-container">
 <ul class="rslides">
   {{ range .Params }}
-  	<li><img src="{{.}}" alt=""></li>
+  	<li><a href="{{.}}" rel="group"><img src="{{.}}" alt=""></a></li>
   {{end}}
 </ul>
 </div>
