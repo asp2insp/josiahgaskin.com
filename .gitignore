@@ -2,3 +2,4 @@
 scripts
 public/
 .hugo_build.lock
+secrets.toml
