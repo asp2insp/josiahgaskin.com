@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Deploy script for josiahgaskin.com
-Builds the Hugo site and deploys to remote host via Fabric
+Builds the Hugo site and deploys to remote host via rsync
 """
 
 import os
@@ -9,7 +9,6 @@ import sys
 import subprocess
 import toml
 from pathlib import Path
-from fabric import Connection
 
 def load_secrets():
     """Load deployment credentials from secrets.toml"""
@@ -49,22 +48,26 @@ def deploy_via_rsync(secrets):
     print(f"🚀 Deploying to {host}:{destination}")
 
     try:
-        # Connect via SSH and ensure destination directory exists
-        with Connection(host, user=username, connect_kwargs={"password": password}) as conn:
-            print(f"📁 Ensuring destination directory exists...")
-            conn.run(f"mkdir -p {destination}", hide=True)
-
-        # Use rsync to sync files
+        # Use rsync with sshpass to handle password authentication
         print(f"📤 Syncing files from {local_public} to {username}@{host}:{destination}...")
-        rsync_cmd = f"rsync -avz --delete {local_public}/ {username}@{host}:{destination}"
+        rsync_cmd = [
+            "rsync",
+            "-avz",
+            "--delete",
+            f"{local_public}/",
+            f"{username}@{host}:{destination}"
+        ]
 
-        # Create a temporary password file for non-interactive auth
+        # Set up environment with sshpass
+        env = os.environ.copy()
+        env['SSHPASS'] = password
+
         result = subprocess.run(
-            rsync_cmd,
-            shell=True,
+            ["sshpass", "-e"] + rsync_cmd,
             cwd=Path(__file__).parent,
             capture_output=True,
-            text=True
+            text=True,
+            env=env
         )
 
         if result.returncode != 0:
@@ -74,6 +77,9 @@ def deploy_via_rsync(secrets):
         print("✅ Deployment successful!")
         return True
 
+    except FileNotFoundError:
+        print("❌ Error: sshpass not found. Install with: brew install sshpass")
+        return False
     except Exception as e:
         print(f"❌ Deployment failed: {e}")
         return False
