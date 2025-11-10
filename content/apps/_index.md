@@ -1,6 +1,4 @@
 ---
 title: "Apps"
-description: "Interactive web applications"
+description: "Collection of Random Fun Things"
 ---
-
-Interactive applications built with modern web technologies.

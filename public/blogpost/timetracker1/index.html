@@ -68,27 +68,83 @@ even if they aren&rsquo;t paying you.</p>
 <h3 id="data-models">Data Models</h3>
 <p>Each data item is assumed to have a GUID and a link to a parent object. This mirrors the specification of the Google AppEngine datastore which is used for the implementation.</p>
 <h4 id="employee">Employee:</h4>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="codeblock">
+
+{
+	Name: "Jane Daw",
+	Phone: "###-###-####",
+	Email: "janedaw@service.com",
+	BonusPayItems: [
+		"Holiday Bonus": 1000,
+	],
+}
+
+</pre>
 <h4 id="client">Client:</h4>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="codeblock">
+
+{
+	Name: "John Doe",
+	Phone: "###-###-####",
+	Email: "johndoe@example.com",
+	BillingRates {
+		"JaneDaw/APBiology": 80,
+		"JaneDaw/APPhysics": 100,
+		"TedSmith/Writing": 75,
+	},
+}
+
+</pre>
 <h4 id="session">Session:</h4>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="codeblock">
+
+{
+	_Parent: *Client{"John Doe"},
+	Date: 01/31/2014,
+	Hours: 1,
+	Employee: *Employee{"Jane Daw"},
+	SessionType: "APBiology",
+	Notes: "Cell Mitosis/Meiosis",
+	BonusPayItems: [],
+}
+
+</pre>
 <h4 id="employee-pay-stub">Employee Pay Stub:</h4>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="codeblock">
+
+{
+	_Parent: *Employee{"Jane Daw"},
+	Date: 01/31/2014,
+	Amount: 5400,
+	CheckNumber: 9999,
+	Memo: "",
+}
+
+</pre>
 <h4 id="client-pay-receipt">Client Pay Receipt</h4>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<pre class="codeblock">
+
+{
+	_Parent: *Client{"John Doe"},
+	Date: 01/31/2014,
+	Amount: 600,
+	CheckNumber: 55555,
+	Memo: "",
+}
+
+</pre>
 <h3 id="session-recording-screen">Session Recording Screen</h3>
 <p>Obviously an office manager should be able to record sessions on behalf of an employee, but the employee should also have the ability to enter their own completed work. This allows for distributed responsibility, a useful system if the employees are technically contractors (common in tutoring and music lessons).</p>
 <p>This requires that the employee or office manager be logged in, so there is some identity associated with the session record.</p>
 <h4 id="prototype">Prototype</h4>
 <p>The prototype for this screen can be found on codepen: <a href="http://codepen.io/ca-geo/pen/jbmLF">http://codepen.io/ca-geo/pen/jbmLF</a>. It was built with JQuery and Semantic-UI.
-<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->1<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
+<a name="backlink-1"></a><sup><a href="#footnote-1">1</a></sup></p>
+<div class="footnote-content" data-ord="1">
+  <a name="footnote-1"></a>
+  <a class="backlink" href="#backlink-1"><i class="fa fa-reply fa-1"></i></a>
+  1.
+  http://semantic-ui.com/
+</div>
 <div class="slideshow-container">
 <ul class="rslides">
   

@@ -4,6 +4,7 @@ description: "A touch-based interactive game to pick turns fairly among multiple
 icon: "<i class=\"fa fa-gamepad\"></i>"
 date: 2025-11-10
 draft: false
+type: apps
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +48,7 @@ draft: false
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <div class="info">Touch the screen with multiple fingers to start</div>
+    <div class="info" style="display:none">Touch the screen with multiple fingers to start</div>
 
     <script>
         const canvas = document.getElementById('canvas');
