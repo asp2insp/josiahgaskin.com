@@ -1,3 +1,10 @@
+---
+title: "Who's On First"
+description: "A touch-based interactive game to pick turns fairly among multiple players. Touch the screen with multiple fingers and the game automatically picks a winner after 2 seconds of inactivity."
+icon: "<i class=\"fa fa-gamepad\"></i>"
+date: 2025-11-10
+draft: false
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>

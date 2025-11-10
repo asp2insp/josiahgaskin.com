@@ -1,7 +1,13 @@
 ---
 indexes:
-tag: "tags"
-category: "categories"
+  tag: "tags"
+  category: "categories"
 baseurl: "//www.josiahgaskin.com/"
 title: "Josiah Gaskin writes stuff online"
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+ignoreLogs:
+  - 'warning-goldmark-raw-html'
 ---
