@@ -1,0 +1,667 @@
+<!doctype html>
+<html>
+	<head>
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
+	
+	<title>Josiah Gaskin</title>
+	<link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+	
+
+	<style>
+	body, html {
+  padding-top:2.5em;
+  margin:0;
+  background-color:#fafafa;
+}
+
+.note {
+  display:block;
+  position: absolute;
+  top:10px;
+  left:10px;
+
+  font-family: "Open Sans";
+  font-size: 0.6em;
+}
+
+.new {
+  background-color: #81C784;
+
+  border: 1px solid #757575;
+  padding: 1px;
+  border-radius: 4px;
+
+}
+
+ 
+
+header {
+  width:100%;
+  vertical-align: middle;
+  text-align: center;
+ 
+}
+
+.header-content {
+  display: inline-block;
+}
+
+.pic {
+  margin: 0 auto;
+  margin-top:-2.5em;
+  
+  border-radius:10em;
+  height:4em;
+  width:4em;
+  
+  border: 2px solid #e0e0e0;
+  transition : all 0.5s linear;
+  
+}
+
+@-webkit-keyframes wiggle {
+  0%   {
+    transform: rotate(0deg);
+  }
+  25%  {
+    transform: rotate(-30deg);
+  }
+  50%  {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.pic:hover {
+   
+  -webkit-transform: translateZ(0);
+  
+  cursor:pointer;
+  
+  -webkit-animation: wiggle 0.7s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.header-text {
+  margin-top:0.5em;
+  margin-left:1em;
+}
+
+header p {
+  text-align:center;
+  font-family: "Merriweather";
+  
+  margin:0;
+  
+  color: #212121;
+}
+
+.first-name {
+   font-size: 1.05em;
+}
+
+.subtitle {
+  font-family: "Merriweather";
+  padding-top:.3em;
+  font-size:0.55em;
+  font-weight:500;
+  color: #424242;
+}
+
+ 
+
+.paper {
+  margin: 0 auto;
+  margin-bottom:1em;
+  
+  background-color:white;
+  width:60%;
+  
+  padding:0.5em 0 0.5em 0;
+  
+  border-top: 1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 3px solid #e0e0e0;
+  border-radius:3px;
+}
+
+@media(max-width:992px) {
+  .paper {
+    width:80%;
+  }
+}
+
+ 
+
+.content-wrapper {
+  padding-right:7.25%;
+}
+
+.content {
+  display:table;
+  width:100%;
+  
+  padding-top:1.5em;
+  
+   
+}
+
+.content:last-child {
+  margin-bottom: 2em;
+}
+
+body > div > article > div > section:last-child {
+  padding-bottom:1.5em;
+}
+
+.row {
+    display:table-row;
+}
+.row div {
+    display:table-cell;
+}
+
+.content-cat {
+  font-family: "Merriweather";
+  font-variant:small-caps;
+  font-weight:300;
+  letter-spacing: 1px;
+  
+  color: #212121;
+  
+  font-size:0.975em;
+  
+  text-align:center;
+  vertical-align:middle;
+
+  padding-left:6.66%;
+  width:30%;
+}
+
+.content-cat p {
+  font-size:0.55em;
+  font-weight:600;
+  
+  margin-bottom:0;
+}
+
+.content-text {
+  border-left:1px solid #e0e0e0;
+  transition: border 0.66s ease-in;
+}
+
+.big-text {
+  vertical-align:top;
+}
+
+.content-text ul {
+  padding:0;
+  margin:0;
+  margin-top:0.15em;
+  
+  width:85%;
+  margin-left:1.5em;
+}
+
+.content-text ul:last-child {
+  margin-bottom:0.5em;
+}
+
+.content-text ul li {
+  font-family: "Open Sans";
+  font-size:0.7em;
+  
+  display:inline-block;
+  
+}
+
+.content-text ul li:first-child {
+  width:35%;
+  
+  color: #424242;
+  
+  font-weight:600;
+}
+
+.content-text ul li a, div.content-text.work-listing.education-listing > p > strong > a {
+  text-decoration: none;
+  color: #0277bd;
+}
+
+.content-text ul li a:hover {
+  color:#4fc3f7;
+}
+
+.work-listing p {
+  font-family: "Open Sans";
+  font-size:0.7em;
+  
+  color: #424242;
+  
+  margin-left:2em;
+  margin-top:0.45em;
+  margin-bottom: 0.45em;
+}
+
+div.content-text.work-listing.education-listing > p:nth-child(2) {
+  margin-top:0.25em;
+}
+
+.work-listing .highlight {
+  font-family: "Open Sans";
+  font-size:0.7em;
+  font-weight:400;
+  
+  color: #424242;
+  
+  margin-left:3.25em;
+  padding-left:0.5em;
+  
+  border-left:1px solid #e0e0e0;
+  
+}
+
+.education-listing > .heading {
+  font-weight:600;
+  
+  margin-top:0.75em;
+  margin-left:2em;
+}
+
+.education-listing > .highlight {
+  margin-left:3.25em;
+}
+
+.highlight {
+  transition: border .33s ease-in;
+}
+
+.profiles-listing ul li, .profiles-listing ul li:first-child {
+  width:32%;
+  font-weight: normal;
+}
+
+.work-content, .education-content {
+  padding-top: .75em;
+}
+
+section.content.education-content > div > div.content-cat {
+  vertical-align: top;
+}
+
+div.content-text.skills-listing > p {
+  font-family: "Open Sans";
+  font-size:0.7em;
+  font-weight:400;
+
+  margin-left: 2em;
+  margin-top: 0.45em;
+  margin-bottom: 0.45em;
+}
+
+div.content-text.skills-listing > p > {
+  color:#212121;
+}
+
+
+	</style>
+
+	<style media="print">
+	
+body, html {
+  background-color: white;
+  padding-top: 1.5em;
+}
+
+.paper {
+  width:100%;
+  border: 0;
+
+  padding-top: 0;
+}
+
+header p {
+  font-size: 1.3em;
+}
+
+.subtitle {
+  font-size: 0.7em;
+}
+
+.header-pic {
+  float:left;
+}
+
+.profiles {
+  display:none;
+}
+
+.content {
+  page-break-inside:avoid; 
+  page-break-after:auto;
+}
+
+.header-text {
+  float:left;
+  margin-top: -1.6em;
+}
+
+.content-wrapper > .content:first-child {
+  padding-top: 2em;
+}
+
+.content:last-child {
+  padding-bottom: 0;
+}
+
+.content-cat {
+  width:33%;
+  color:black;
+  text-align: left;
+}
+
+.content-cat p {
+  font-size:0.6em;
+  font-weight: 600;
+}
+
+header p, .content-text, .work-listing p, .content-text ul li:first-child, .work-listing .highlight, .content-text.skills-listing > ul > li > .highlight {
+  color:black;
+}
+
+.content-text.skills-listing > ul > li span, .subtitle {
+  color:#212121;
+}
+
+.content-text ul:last-child {
+  margin-bottom: 0.25em;
+}
+
+.content-text ul li:first-child {
+  width:50%;
+}
+
+.profiles-listing ul li:first-child {
+  width:32%;
+}
+
+div.content-text.skills-listing > ul > li {
+  width:33%;
+}
+
+.work-listing p {
+  margin-bottom: 0.1em;
+}
+
+div.content-text.skills-listing > ul > li > p {
+  margin-top: 0.4em;
+  margin-bottom: 0.5em;
+}
+
+div.content-text.skills-listing > ul > li {
+  padding-left: 1.5em;
+}
+
+div.content-text.skills-listing > ul > li:first-child {
+  padding-left: 2em;
+}
+
+.note {
+  display:none;
+}
+
+.content-text:hover {
+  border-left:1px solid #eeeeee;
+}
+
+.content-text ul li a:hover {
+  color:#4fc3f7;
+}
+
+.highlight:hover, .content-text.skills-listing > ul > li > .highlight:hover {
+  border-left:1px solid #eeeeee;
+}
+
+.big-text {
+  padding-top: 0;
+}
+	</style>
+	
+	</head>
+	<body>
+	
+	<span class="note">Check out new print view! (<strong>Press Ctrl + P</strong>) (Not available in Live-Editor!)</span>
+
+		<div class="resume-wrapper">
+		  <article class="paper">
+			    <header>
+			      <div class="header-content">
+			        <div class="header-text">
+			          <p>
+			            Josiah Gaskin
+			          </p>
+			          <p class="subtitle">Infrastructure enginner with a focus on DevInfra, and AI Infra</p>
+			        </div>
+			      </div>
+			    </header>
+			    <div class="content-wrapper">
+			    
+			      
+			      <section class="content">
+			        <div class="row">
+			          <div class="content-cat">
+			           Contact
+			          </div>
+			          <div class="content-text">
+				            <ul>
+				              <li>Website</li>
+				              <li>http://josiahgaskin.com</li>
+				            </ul>
+
+				            <ul>
+				              <li>Email</li>
+				              <li><a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="02686d716b636a656371696b6c42656f636b6e2c616d6f">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">
+ !function(){try{var t="currentScript"in document?document.currentScript:function(){for(var t=document.getElementsByTagName("script"),e=t.length;e--;)if(t[e].getAttribute("data-cfhash"))return t[e]}();if(t&&t.previousSibling){var e,r,n,i,c=t.previousSibling,a=c.getAttribute("data-cfemail");if(a){for(e="",r=parseInt(a.substr(0,2),16),n=2;a.length-n;n+=2)i=parseInt(a.substr(n,2),16)^r,e+=String.fromCharCode(i);e=document.createTextNode(e),c.parentNode.replaceChild(e,c)}t.parentNode.removeChild(t);}}catch(u){}}() </script></li>
+				            </ul>
+
+				            <ul>
+				              <li>Phone</li>
+				              <li>650.395.7789</li>
+				            </ul>
+			          </div>
+			        </div>
+			      </section>
+
+			      
+
+						
+						
+
+			      
+
+								<section class="content">
+			        <div class="row">
+			          <div class="content-cat big-text">
+											Work	Experience
+<br>
+<p>2016-02-02 till Present</p>
+
+			          
+
+			          </div>
+			          <div class="content-text work-listing education-listing">
+					            <p style="margin-top:2.4em;">
+								<strong>Software Engineer</strong> at <strong><a href="https://www.meta.com/">Meta:</a></strong>
+					            </p>
+
+											<p><a href="https://ai.meta.com/blog/next-generation-meta-training-inference-accelerator-AI-MTIA/">AI Infra</a> (Rust, Python), <a href="https://github.com/facebook/buck2">Build Systems</a> (Rust, Java, Python)</p>
+
+												<p class="highlight">Led DevX for Custom AI Accelerator Platform</p>
+												<p class="highlight">Distributed Build Systems Lead</p>
+												<p class="highlight">Led DevX/Tools teams for Android and Backend</p>
+
+									
+			          </div>
+			        </div>
+			      </section>
+					<section class="content work-content">
+			        <div class="row">
+			          <div class="content-cat big-text">
+			          
+			            		<p>2014-10-15 till 2016-02-01</p>
+
+			          </div>
+			          <div class="content-text work-listing education-listing">
+					            <p>
+									<strong>Senior Software Engineer</strong> at  <strong><a href="https://www.optimizely.com/mobile">Optimizely Inc.:</a></strong>
+					            </p>
+								<p>Android (Java), iOS (Objective-C, Swift), Google App Engine (Python)</p>
+
+												<p class="highlight">Built A/B Testing SDK for Android</p>
+												<p class="highlight">Tech Lead and IC for Mobile SDKs and Services</p>
+												<p class="highlight">Built error reporting pipeline and dashboards</p>
+
+									
+			          </div>
+			        </div>
+			      </section>
+
+								<section class="content work-content">
+			        <div class="row">
+			          <div class="content-cat big-text">
+			          
+			            		<p>2013-06-01 till 2014-10-13</p>
+
+			          </div>
+			          <div class="content-text work-listing education-listing">
+					            <p>
+													<strong>Software Engineer</strong> at <strong><a href="https://tools.android.com/">Google Inc.:</a></strong>
+					            </p>
+
+											<p>Java, Swing, IntelliJ Platform</p>
+
+												<p class="highlight">Implemented a Virtual Device Manager</p>
+												<p class="highlight">Built code generation infrastructure for Android Studio</p>
+												<p class="highlight">Implemented welcome flows and project creation</p>
+
+									
+			          </div>
+			        </div>
+			      </section>
+								<section class="content work-content">
+			        <div class="row">
+			          <div class="content-cat big-text">
+			          
+			            		<p>2011-12-01 till 2013-05-31</p>
+
+			          </div>
+			          <div class="content-text work-listing education-listing">
+					            <p>
+													<strong>Android Development Lead</strong> at <strong><a href="https://oneaura.com/">Aura Labs:</a></strong>
+					            </p>
+
+											<p>Java/Android, ObjectiveC/CocoaTouch, Django, NodeJS, AWS.</p>
+
+												<p class="highlight">Spearheaded development of Android applications</p>
+												<p class="highlight">Designed/implemented an SDK to allow third-party developers to access data</p>
+												<p class="highlight">Designed/built realtime data processing pipelines</p>
+												<p class="highlight">Created cross-platform biometric computation libraries</p>
+
+									
+			          </div>
+			        </div>
+			      </section>
+								<section class="content work-content">
+			        <div class="row">
+			          <div class="content-cat big-text">
+			          
+			            		<p>2012-05-15 till 2012-08-15</p>
+
+			          </div>
+			          <div class="content-text work-listing education-listing">
+					            <p>
+													<strong>Software Engineering Intern</strong> at <strong><a href="https://plus.google.com/photos">Google Inc:</a></strong>
+					            </p>
+
+											<p>JS/Closure, Soy</p>
+
+												<p class="highlight">Launched Google+ Events</p>
+												<p class="highlight">Added zooming and panning support to photos in Google+</p>
+
+									
+			          </div>
+			        </div>
+			      </section>
+								
+
+					
+
+								<section class="content">
+				        <div class="row">
+				          <div class="content-cat big-text">
+
+				            	Education
+
+				            		<p>2009-09-01 till 2013-05-15</p>
+
+				          </div>
+				          <div class="content-text work-listing education-listing">
+						            <p class="heading" style="margin-top:2.35em;">Harvey Mudd College</p>
+
+				            		<p class="highlight">
+													Bachelor:
+				            		<i>Computer Science (3.58)</i>
+				            		</p>
+
+				          </div>
+				        </div>
+				      </section>
+
+
+			      <section class="content">
+			        <div class="row">
+			          <div class="content-cat">
+			            Skills
+			          </div>
+			          <div class="content-text skills-listing">
+			            	<p>
+			            	<span class="name">
+											<strong>
+											Languages
+
+											</strong>
+			            	</span>
+
+		                	<span>(Fluent):</span>
+
+												Rust, Python, Java, Objective-C, Swift, Go, JavaScript, HTML/CSS
+			            	</p>
+			            	<p>
+			            	<span class="name">
+											<strong>
+											Frameworks and Tools
+
+											</strong>
+			            	</span>
+
+		                	<span>(Fluent):</span>
+
+												Tokio, Android, iOS, NodeJS
+			            	</p>
+			          </div>
+			        </div>
+			      </section>
+
+
+		    </div>
+		      
+		  </article>
+		  
+		</div>
+	</body>
+</html>
