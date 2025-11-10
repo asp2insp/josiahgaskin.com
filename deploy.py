@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Deploy script for josiahgaskin.com
-Builds the Hugo site and deploys to remote host via SFTP
+Builds the Hugo site and deploys to remote host via Fabric
 """
 
 import os
@@ -9,7 +9,7 @@ import sys
 import subprocess
 import toml
 from pathlib import Path
-import pysftp
+from fabric import Connection
 
 def load_secrets():
     """Load deployment credentials from secrets.toml"""
@@ -33,8 +33,8 @@ def build_hugo():
     print("✅ Hugo build successful!")
     return True
 
-def deploy_via_sftp(secrets):
-    """Deploy the public folder to remote host via SFTP"""
+def deploy_via_rsync(secrets):
+    """Deploy the public folder to remote host via rsync over SSH"""
     host = secrets['host']
     username = secrets['username']
     password = secrets['password']
@@ -49,17 +49,27 @@ def deploy_via_sftp(secrets):
     print(f"🚀 Deploying to {host}:{destination}")
 
     try:
-        with pysftp.Connection(host, username=username, password=password) as sftp:
-            # Ensure destination directory exists
-            try:
-                sftp.listdir(destination)
-            except IOError:
-                # Directory doesn't exist, create it
-                sftp.makedirs(destination)
+        # Connect via SSH and ensure destination directory exists
+        with Connection(host, user=username, connect_kwargs={"password": password}) as conn:
+            print(f"📁 Ensuring destination directory exists...")
+            conn.run(f"mkdir -p {destination}", hide=True)
 
-            # Use put_r to recursively upload all files
-            print(f"📤 Uploading files from {local_public} to {destination}...")
-            sftp.put_r(str(local_public), destination, confirm=True)
+        # Use rsync to sync files
+        print(f"📤 Syncing files from {local_public} to {username}@{host}:{destination}...")
+        rsync_cmd = f"rsync -avz --delete {local_public}/ {username}@{host}:{destination}"
+
+        # Create a temporary password file for non-interactive auth
+        result = subprocess.run(
+            rsync_cmd,
+            shell=True,
+            cwd=Path(__file__).parent,
+            capture_output=True,
+            text=True
+        )
+
+        if result.returncode != 0:
+            print(f"❌ Rsync failed: {result.stderr}")
+            return False
 
         print("✅ Deployment successful!")
         return True
@@ -81,8 +91,8 @@ def main():
 
     print()
 
-    # Deploy via SFTP
-    if not deploy_via_sftp(secrets):
+    # Deploy via rsync
+    if not deploy_via_rsync(secrets):
         sys.exit(1)
 
     print("\n✨ Deployment complete!")
