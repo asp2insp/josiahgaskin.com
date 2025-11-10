@@ -7,7 +7,6 @@ tags: ['projects', 'timetracker']
 linktitle: "defining-a-workflow"
 groups: ['blogposts']
 groups_weight: 1
-published: true
 ---
 
 ## Montly Billing Workflow

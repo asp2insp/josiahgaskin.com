@@ -7,7 +7,6 @@ tags: ['site-development', 'personal']
 linktitle: "roadmap"
 groups: ['blogposts']
 groups_weight: 1
-published: true
 ---
 
 ### TODOS (In no particular order)

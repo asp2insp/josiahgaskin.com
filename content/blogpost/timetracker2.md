@@ -7,7 +7,6 @@ tags: ['projects', 'timetracker']
 linktitle: "on-second-thoughts-and-tables"
 groups: ['blogposts']
 groups_weight: 1
-published: true
 ---
 
 This is the second in a series of posts about designing (the easy stuff right now) and building (the hard stuff that I'm putting off) my  time accounting and billing SaaS app Time Tracker.{{% footnote 1 %}}Still a working name{{% /footnote %}}

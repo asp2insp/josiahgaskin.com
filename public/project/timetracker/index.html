@@ -1,5 +1,5 @@
 <html>
-<head><title>Time Tracker</title>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><title>Time Tracker</title>
 <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="/static/css/style.css">
@@ -56,44 +56,28 @@ $(document).ready(function(){
 	<div class="blogpost">
 		<h1 class="posttitle">Time Tracker</h1>
 		<h2 class="subtitle">A SaaS offering for businesses who bill clients by the hour for a variety of services.</h2>
-		
-
-<h2 id="toc_0">Overview</h2>
-
-<h2 id="toc_1">Problem Description</h2>
-
+		<h2 id="overview">Overview</h2>
+<h2 id="problem-description">Problem Description</h2>
 <p>Hugo (<a href="https://www.github.com/spf13/hugo">https://www.github.com/spf13/hugo</a>) is a static site generator written in Go. It&rsquo;s super fast and fairly flexible. I&rsquo;ve really enjoyed using it to build this site.</p>
-
 <p>However, it requires a very strict folder layout and filenaming convention which is daunting when first starting out.
 This project aims to provide a small helper tool that will help you through creating the initial project structure as
 well as project types. It&rsquo;s modelled after django-admin.</p>
-
-<h2 id="toc_2">Existing Solutions</h2>
-
+<h2 id="existing-solutions">Existing Solutions</h2>
 <p>TODO: Fill this in</p>
-
-<h2 id="toc_3">Time Tracker (or why I&rsquo;m re-inventing the wheel)</h2>
-
+<h2 id="time-tracker-or-why-im-re-inventing-the-wheel">Time Tracker (or why I&rsquo;m re-inventing the wheel)</h2>
 <p>Why is this better? Good question.</p>
-
-<h2 id="toc_4">Implementation</h2>
-
+<h2 id="implementation">Implementation</h2>
 <p>Time Tracker is built in several pieces.</p>
-
 <ol>
 <li>A core API which manages records and provides endpoints for lookup and manipulation</li>
 <li>A desktop web client</li>
 <li>(Future Planning) A native Android app</li>
 <li>(Future Planning) A native iOS app</li>
 </ol>
-
 <p>All of these first party clients are clients of the same API that is exposed publicly. The API speaks JSON.</p>
-
 <p>This core API is built on Google AppEngine and written in Go. The web client is also served from an AppEngine module, but mostly consists of static files and thus may be served by any web framework with URL routing. It is built using HTML5/CSS3/JQuery and utilizes the Semantic-UI frontend framework.</p>
-
-<h2 id="toc_5">Documentation</h2>
-
-<h3 id="toc_6">API</h3>
+<h2 id="documentation">Documentation</h2>
+<h3 id="api">API</h3>
 
 		<div class="footnote-container"></div>
 	</div>
@@ -122,8 +106,5 @@ well as project types. It&rsquo;s modelled after django-admin.</p>
 <div class="backcontainer">
 	<a href="/project/"><i class="fa fa-chevron-left fa-2x"></i></a>
 </div>
-<script>document.write('<script src="http://'
-        + (location.host || 'localhost').split(':')[0]
-		+ ':1313/livereload.js?mindelay=10"></'
-        + 'script>')</script></body>
+</body>
 </html>

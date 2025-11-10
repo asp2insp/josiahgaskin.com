@@ -6,7 +6,6 @@ aliases: []
 linktitle: "hugoadmin"
 groups: ['projects']
 groups_weight: 1
-published: true
 ---
 
 ## Motivation

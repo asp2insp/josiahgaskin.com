@@ -7,7 +7,7 @@ tags: ['cryptography', 'projects']
 linktitle: "splay-tree-encoding"
 groups: ['blogposts']
 groups_weight: 1
-published: false
+draft: true
 ---
 
 Keys

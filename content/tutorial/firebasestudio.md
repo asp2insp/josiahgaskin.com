@@ -21,7 +21,7 @@ Setup
 
 Use the New Project Wizard to create a new project. I selected a minimum SDK of 15 (supports more than 80% of the devices that have been [active on the Google Play Store](https://developer.android.com/about/dashboards/index.html) in the last month). Otherwise, I left all the options on their default values.
 
-{{% responsiveslides /static/img/tutorials/android-studio/createproject-details.png /static/img/tutorials/android-studio/createproject-addactivity.png /static/img/tutorials/android-studio/createproject-parameters.png /static/img/tutorials/android-studio/project-overview.png %}}
+{{< responsiveslides "/static/img/tutorials/android-studio/createproject-details.png" "/static/img/tutorials/android-studio/createproject-addactivity.png" "/static/img/tutorials/android-studio/createproject-parameters.png" "/static/img/tutorials/android-studio/project-overview.png" >}}
 
 If you're following along at home, your project structure should look similar to the last slide above.
 
