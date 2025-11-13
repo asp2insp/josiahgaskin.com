@@ -55,6 +55,57 @@ type: apps
         const ctx = canvas.getContext('2d');
         const infoDiv = document.querySelector('.info');
 
+        // Initialize Web Audio API for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Play a chirp sound (touch creation)
+        function playChirpSound() {
+            try {
+                const now = audioContext.currentTime;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                // Quick ascending chirp: 400Hz -> 800Hz in 100ms
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } catch (e) {
+                // Audio context may not be available on all platforms
+            }
+        }
+
+        // Play a down sound (touch removal)
+        function playDownSound() {
+            try {
+                const now = audioContext.currentTime;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                // Quick descending tone: 600Hz -> 300Hz in 80ms
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } catch (e) {
+                // Audio context may not be available on all platforms
+            }
+        }
+
         // Set canvas size with correct aspect ratio
         function resizeCanvas() {
             const rect = canvas.getBoundingClientRect();
@@ -319,11 +370,20 @@ type: apps
             updateDebugInfo('Touch the screen with multiple fingers to start');
         }
 
-        // Trigger haptic feedback
-        function triggerHaptic() {
+        // Trigger haptic feedback and sound for touch creation
+        function playTouchCreationFeedback() {
             if (navigator.vibrate) {
                 navigator.vibrate(20); // 20ms vibration
             }
+            playChirpSound();
+        }
+
+        // Trigger haptic feedback and sound for touch removal
+        function playTouchRemovalFeedback() {
+            if (navigator.vibrate) {
+                navigator.vibrate(15); // 15ms vibration
+            }
+            playDownSound();
         }
 
         // Touch event handlers
@@ -339,7 +399,7 @@ type: apps
                         touch.clientY,
                         colorIndex
                     ));
-                    triggerHaptic();
+                    playTouchCreationFeedback();
                 }
             }
             updateDebugInfo(`Touchstart: ${e.touches.length} active touch${e.touches.length !== 1 ? 'es' : ''}`);
@@ -365,9 +425,9 @@ type: apps
                 const target = touchTargets.get(touch.identifier);
                 if (target) {
                     deallocateColor(target.colorIndex);
+                    playTouchRemovalFeedback();
                 }
                 touchTargets.delete(touch.identifier);
-                triggerHaptic();
             }
 
             if (touchTargets.size === 0) {
@@ -386,9 +446,9 @@ type: apps
                 const target = touchTargets.get(touch.identifier);
                 if (target) {
                     deallocateColor(target.colorIndex);
+                    playTouchRemovalFeedback();
                 }
                 touchTargets.delete(touch.identifier);
-                triggerHaptic();
             }
 
             if (touchTargets.size === 0) {
@@ -413,7 +473,7 @@ type: apps
                     e.clientY,
                     colorIndex
                 ));
-                triggerHaptic();
+                playTouchCreationFeedback();
             }
             updateDebugInfo('Mousedown: 1 active touch (desktop mode)');
             resetInactivityTimer();
@@ -434,9 +494,9 @@ type: apps
             const target = touchTargets.get('mouse');
             if (target) {
                 deallocateColor(target.colorIndex);
+                playTouchRemovalFeedback();
             }
             touchTargets.delete('mouse');
-            triggerHaptic();
 
             if (touchTargets.size === 0) {
                 clearTimeout(inactivityTimer);
