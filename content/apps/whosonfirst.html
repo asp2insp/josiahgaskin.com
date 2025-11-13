@@ -45,16 +45,48 @@ type: apps
             pointer-events: none;
             z-index: 10;
         }
+
+        .tap-to-start {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #888;
+            font-size: 36px;
+            font-weight: 300;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            letter-spacing: 2px;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .tap-to-start.hidden {
+            opacity: 0 !important;
+            animation: none;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0.6;
+            }
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <div class="tap-to-start">tap to start</div>
     <div class="info" style="display:none">Touch the screen with multiple fingers to start</div>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const infoDiv = document.querySelector('.info');
+        const tapToStartDiv = document.querySelector('.tap-to-start');
 
         // Initialize Tone.js for all sounds
         // Create a reverb effect
@@ -653,6 +685,11 @@ type: apps
             lastTouchChange = 0;
             winnerAnimationCompleteTime = null;
             updateDebugInfo('Touch the screen with multiple fingers to start');
+
+            // Show "tap to start" again
+            if (tapToStartDiv) {
+                tapToStartDiv.classList.remove('hidden');
+            }
         }
 
         // Trigger haptic feedback and sound for touch creation
@@ -720,8 +757,17 @@ type: apps
             return false;
         }
 
+        // Hide "tap to start" on first interaction
+        function hideTapToStart() {
+            if (tapToStartDiv && !tapToStartDiv.classList.contains('hidden')) {
+                tapToStartDiv.classList.add('hidden');
+            }
+        }
+
         // Touch event handlers
         document.addEventListener('touchstart', (e) => {
+            hideTapToStart();
+
             if (scoreTrackingMode) {
                 const touch = e.touches[0];
                 if (handleScoreModeTouch(touch.clientX, touch.clientY)) {
@@ -824,6 +870,8 @@ type: apps
         let isMouseDown = false;
         let mouseColorIndex = 0;
         document.addEventListener('mousedown', (e) => {
+            hideTapToStart();
+
             if (scoreTrackingMode) {
                 handleScoreModeTouch(e.clientX, e.clientY);
                 isMouseDown = true;
