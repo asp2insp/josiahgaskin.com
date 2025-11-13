@@ -102,7 +102,7 @@ type: apps
             };
         }
 
-        // Play a chirp sound (touch creation) with color-specific pitch and harmonics
+        // Play a chirp sound (touch creation) with color-specific pitch
         function playChirpSound(colorIndex) {
             try {
                 const now = audioContext.currentTime;
@@ -116,50 +116,24 @@ type: apps
                 reverb.output.connect(audioContext.destination);
 
                 // Fundamental frequency
-                const osc1 = audioContext.createOscillator();
-                const gain1 = audioContext.createGain();
-                osc1.connect(gain1);
-                gain1.connect(reverb.input);
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(reverb.input);
 
-                osc1.frequency.setValueAtTime(baseFreq, now);
-                osc1.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
-                gain1.gain.setValueAtTime(0.4, now);
-                gain1.gain.exponentialRampToValueAtTime(0.05, now + duration);
+                osc.frequency.setValueAtTime(baseFreq, now);
+                osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.05, now + duration);
 
-                // 2nd harmonic (octave)
-                const osc2 = audioContext.createOscillator();
-                const gain2 = audioContext.createGain();
-                osc2.connect(gain2);
-                gain2.connect(reverb.input);
-
-                osc2.frequency.setValueAtTime(baseFreq * 2, now);
-                osc2.frequency.exponentialRampToValueAtTime(endFreq * 2, now + duration);
-                gain2.gain.setValueAtTime(0.15, now);
-                gain2.gain.exponentialRampToValueAtTime(0.01, now + duration);
-
-                // 3rd harmonic (twelfth)
-                const osc3 = audioContext.createOscillator();
-                const gain3 = audioContext.createGain();
-                osc3.connect(gain3);
-                gain3.connect(reverb.input);
-
-                osc3.frequency.setValueAtTime(baseFreq * 3, now);
-                osc3.frequency.exponentialRampToValueAtTime(endFreq * 3, now + duration);
-                gain3.gain.setValueAtTime(0.08, now);
-                gain3.gain.exponentialRampToValueAtTime(0.005, now + duration);
-
-                osc1.start(now);
-                osc2.start(now);
-                osc3.start(now);
-                osc1.stop(now + duration);
-                osc2.stop(now + duration);
-                osc3.stop(now + duration);
+                osc.start(now);
+                osc.stop(now + duration);
             } catch (e) {
                 // Audio context may not be available on all platforms
             }
         }
 
-        // Play a down sound (touch removal) with color-specific pitch and harmonics
+        // Play a down sound (touch removal) with color-specific pitch
         function playDownSound(colorIndex) {
             try {
                 const now = audioContext.currentTime;
@@ -173,44 +147,18 @@ type: apps
                 reverb.output.connect(audioContext.destination);
 
                 // Fundamental frequency
-                const osc1 = audioContext.createOscillator();
-                const gain1 = audioContext.createGain();
-                osc1.connect(gain1);
-                gain1.connect(reverb.input);
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(reverb.input);
 
-                osc1.frequency.setValueAtTime(baseFreq, now);
-                osc1.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
-                gain1.gain.setValueAtTime(0.4, now);
-                gain1.gain.exponentialRampToValueAtTime(0.05, now + duration);
+                osc.frequency.setValueAtTime(baseFreq, now);
+                osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.05, now + duration);
 
-                // 2nd harmonic (octave)
-                const osc2 = audioContext.createOscillator();
-                const gain2 = audioContext.createGain();
-                osc2.connect(gain2);
-                gain2.connect(reverb.input);
-
-                osc2.frequency.setValueAtTime(baseFreq * 2, now);
-                osc2.frequency.exponentialRampToValueAtTime(endFreq * 2, now + duration);
-                gain2.gain.setValueAtTime(0.15, now);
-                gain2.gain.exponentialRampToValueAtTime(0.01, now + duration);
-
-                // 3rd harmonic (twelfth)
-                const osc3 = audioContext.createOscillator();
-                const gain3 = audioContext.createGain();
-                osc3.connect(gain3);
-                gain3.connect(reverb.input);
-
-                osc3.frequency.setValueAtTime(baseFreq * 3, now);
-                osc3.frequency.exponentialRampToValueAtTime(endFreq * 3, now + duration);
-                gain3.gain.setValueAtTime(0.08, now);
-                gain3.gain.exponentialRampToValueAtTime(0.005, now + duration);
-
-                osc1.start(now);
-                osc2.start(now);
-                osc3.start(now);
-                osc1.stop(now + duration);
-                osc2.stop(now + duration);
-                osc3.stop(now + duration);
+                osc.start(now);
+                osc.stop(now + duration);
             } catch (e) {
                 // Audio context may not be available on all platforms
             }
