@@ -12,6 +12,7 @@ type: apps
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Who's On First - Touch Turn Picker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
         * {
             margin: 0;
@@ -55,161 +56,79 @@ type: apps
         const ctx = canvas.getContext('2d');
         const infoDiv = document.querySelector('.info');
 
-        // Initialize Web Audio API for sound effects
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // Initialize Tone.js for all sounds
+        // Create a reverb effect
+        const reverb = new Tone.Reverb({
+            decay: 2.5,
+            wet: 0.3
+        }).toDestination();
 
-        // Major scale intervals (semitones) starting from C: C D E F G A B C
-        // Used to pitch-shift sounds based on color index
-        const majorScaleIntervals = [0, 2, 4, 5, 7, 9, 11, 12]; // semitones from base
 
-        // Convert semitones to frequency ratio
-        function semitonesToRatio(semitones) {
-            return Math.pow(2, semitones / 12);
+        // Create a membrane synth for the ta-da chime (bell-like)
+        const bellSynth = new Tone.MembraneSynth({
+            pitchDecay: 0.05,
+            octaves: 6,
+            oscillator: {
+                type: "sine"
+            },
+            envelope: {
+                attack: 0.001,
+                decay: 0.4,
+                sustain: 0.01,
+                release: 1.0,
+                attackCurve: "exponential"
+            }
+        }).connect(reverb);
+
+        // Major scale notes for color-based pitch
+        const majorScale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+
+        // Get note from color index
+        function getNoteFromColorIndex(colorIndex) {
+            return majorScale[colorIndex % majorScale.length];
         }
 
-        // Get the pitch ratio for a given color index
-        function getPitchRatio(colorIndex) {
-            const scaleIndex = colorIndex % majorScaleIntervals.length;
-            const octaveOffset = Math.floor(colorIndex / majorScaleIntervals.length);
-            const semitones = majorScaleIntervals[scaleIndex] + (octaveOffset * 12);
-            return semitonesToRatio(semitones);
-        }
-
-        // Create simple reverb using delay lines
-        function createReverbNode() {
-            const dryGain = audioContext.createGain();
-            const wetGain = audioContext.createGain();
-            const delayNode = audioContext.createDelay(0.5);
-            const delayFeedback = audioContext.createGain();
-            const merger = audioContext.createChannelMerger(2);
-
-            delayNode.delayTime.value = 0.08;
-            delayFeedback.gain.value = 0.3;
-            wetGain.gain.value = 0.2;
-            dryGain.gain.value = 0.8;
-
-            delayNode.connect(delayFeedback);
-            delayFeedback.connect(delayNode);
-            delayNode.connect(wetGain);
-            dryGain.connect(merger, 0, 0);
-            wetGain.connect(merger, 0, 1);
-
-            return {
-                input: dryGain,
-                output: merger,
-                delay: delayNode,
-                wet: wetGain
-            };
-        }
-
-        // Play a chirp sound (touch creation) with color-specific pitch
-        function playChirpSound(colorIndex) {
+        // Play a chirp sound (touch creation) with color-specific pitch using Tone.js
+        async function playChirpSound(colorIndex) {
             try {
-                const now = audioContext.currentTime;
-                const duration = 0.15;
-                const pitchRatio = getPitchRatio(colorIndex);
-                const baseFreq = 400 * pitchRatio;
-                const endFreq = 800 * pitchRatio;
+                await Tone.start();
+                const note = getNoteFromColorIndex(colorIndex);
+                const now = Tone.now();
 
-                // Create reverb
-                const reverb = createReverbNode();
-                reverb.output.connect(audioContext.destination);
-
-                // Fundamental frequency
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                osc.connect(gain);
-                gain.connect(reverb.input);
-
-                osc.frequency.setValueAtTime(baseFreq, now);
-                osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
-                gain.gain.setValueAtTime(0.4, now);
-                gain.gain.exponentialRampToValueAtTime(0.05, now + duration);
-
-                osc.start(now);
-                osc.stop(now + duration);
+                // Use bellSynth for a chime-like sound
+                bellSynth.triggerAttackRelease(note, "32n", now);
             } catch (e) {
-                // Audio context may not be available on all platforms
+                // Audio may not be available on all platforms
             }
         }
 
-        // Play a down sound (touch removal) with color-specific pitch
-        function playDownSound(colorIndex) {
+        // Play a down sound (touch removal) with color-specific pitch using Tone.js
+        async function playDownSound(colorIndex) {
             try {
-                const now = audioContext.currentTime;
-                const duration = 0.12;
-                const pitchRatio = getPitchRatio(colorIndex);
-                const baseFreq = 600 * pitchRatio;
-                const endFreq = 300 * pitchRatio;
+                await Tone.start();
+                const note = getNoteFromColorIndex(colorIndex);
+                const now = Tone.now();
 
-                // Create reverb
-                const reverb = createReverbNode();
-                reverb.output.connect(audioContext.destination);
-
-                // Fundamental frequency
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                osc.connect(gain);
-                gain.connect(reverb.input);
-
-                osc.frequency.setValueAtTime(baseFreq, now);
-                osc.frequency.exponentialRampToValueAtTime(endFreq, now + duration);
-                gain.gain.setValueAtTime(0.4, now);
-                gain.gain.exponentialRampToValueAtTime(0.05, now + duration);
-
-                osc.start(now);
-                osc.stop(now + duration);
+                // Use bellSynth with lower octave for down sound
+                const lowerNote = Tone.Frequency(note).transpose(-12).toNote(); // One octave down
+                bellSynth.triggerAttackRelease(lowerNote, "32n", now);
             } catch (e) {
-                // Audio context may not be available on all platforms
+                // Audio may not be available on all platforms
             }
         }
 
-        // Play a "ta-da" chime sound for winner announcement
-        function playTadaChime() {
+        // Play a "ta-da" chime sound for winner announcement - New bell-like tone
+        async function playTadaChime() {
             try {
-                const now = audioContext.currentTime;
-                const baseFreq = 520; // G5 note
-                const midFreq = 659;  // E5 note
-                const highFreq = 784; // G5 note (higher)
+                await Tone.start();
+                const now = Tone.now();
 
-                // Create reverb
-                const reverb = createReverbNode();
-                reverb.output.connect(audioContext.destination);
-
-                // First note: G5 (0.15s)
-                const osc1 = audioContext.createOscillator();
-                const gain1 = audioContext.createGain();
-                osc1.connect(gain1);
-                gain1.connect(reverb.input);
-                osc1.frequency.value = baseFreq;
-                gain1.gain.setValueAtTime(0.5, now);
-                gain1.gain.exponentialRampToValueAtTime(0.1, now + 0.15);
-                osc1.start(now);
-                osc1.stop(now + 0.15);
-
-                // Second note: E5 (0.1s, starts after first)
-                const osc2 = audioContext.createOscillator();
-                const gain2 = audioContext.createGain();
-                osc2.connect(gain2);
-                gain2.connect(reverb.input);
-                osc2.frequency.value = midFreq;
-                gain2.gain.setValueAtTime(0.5, now + 0.15);
-                gain2.gain.exponentialRampToValueAtTime(0.1, now + 0.35);
-                osc2.start(now + 0.15);
-                osc2.stop(now + 0.35);
-
-                // Third note: G5 high (0.25s, starts after second)
-                const osc3 = audioContext.createOscillator();
-                const gain3 = audioContext.createGain();
-                osc3.connect(gain3);
-                gain3.connect(reverb.input);
-                osc3.frequency.value = highFreq;
-                gain3.gain.setValueAtTime(0.5, now + 0.35);
-                gain3.gain.exponentialRampToValueAtTime(0.05, now + 0.6);
-                osc3.start(now + 0.35);
-                osc3.stop(now + 0.6);
+                // Play an ascending arpeggio: C5 -> E5 -> G5
+                bellSynth.triggerAttackRelease("C5", "8n", now);
+                bellSynth.triggerAttackRelease("E5", "8n", now + 0.15);
+                bellSynth.triggerAttackRelease("G5", "4n", now + 0.3);
             } catch (e) {
-                // Audio context may not be available on all platforms
+                // Audio may not be available on all platforms
             }
         }
 
@@ -395,6 +314,247 @@ type: apps
             }
         }
 
+        // Score tracker for each player
+        class ScoreCircle {
+            constructor(id, x, y, color, colorIndex) {
+                this.id = id;
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.colorIndex = colorIndex;
+                this.score = 0;
+                this.radius = 60;
+                this.buttonDistance = 80; // Distance from center to button arc
+                this.buttonArcLength = 0.6; // Angular width of each button (radians) - increased from 0.45
+                this.buttonThickness = 22; // Radial thickness of button
+                this.isDragging = false;
+                this.dragOffsetX = 0;
+                this.dragOffsetY = 0;
+                this.lastButtonPressTime = 0; // For debouncing
+                this.buttonDebounceDelay = 150; // 150ms debounce
+            }
+
+            // Check if point is inside the main circle
+            containsPoint(x, y) {
+                const dx = x - this.x;
+                const dy = y - this.y;
+                return Math.sqrt(dx * dx + dy * dy) <= this.radius;
+            }
+
+            // Check if point is on an arc button and return the button value
+            getButtonAt(x, y) {
+                const buttons = [
+                    { value: 1, angle: -Math.PI / 2 - 0.75 },     // Top left: +1
+                    { value: 5, angle: -Math.PI / 2 },            // Top center: +5
+                    { value: 10, angle: -Math.PI / 2 + 0.75 },    // Top right: +10
+                    { value: -1, angle: Math.PI / 2 - 0.75 },     // Bottom left: -1
+                    { value: -5, angle: Math.PI / 2 },            // Bottom center: -5
+                    { value: -10, angle: Math.PI / 2 + 0.75 }     // Bottom right: -10
+                ];
+
+                const dx = x - this.x;
+                const dy = y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+
+                for (let button of buttons) {
+                    // Check if point is within the radial range of the button
+                    const innerRadius = this.buttonDistance - this.buttonThickness / 2;
+                    const outerRadius = this.buttonDistance + this.buttonThickness / 2;
+
+                    if (distance >= innerRadius && distance <= outerRadius) {
+                        // Check if point is within the angular range of the button
+                        let angleDiff = angle - button.angle;
+                        // Normalize angle difference to [-PI, PI]
+                        while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+                        while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+
+                        if (Math.abs(angleDiff) <= this.buttonArcLength / 2) {
+                            return button.value;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            adjustScore(delta) {
+                // Debounce: check if enough time has passed since last button press
+                const now = Date.now();
+                if (now - this.lastButtonPressTime < this.buttonDebounceDelay) {
+                    return; // Ignore this press, too soon after last one
+                }
+                this.lastButtonPressTime = now;
+
+                this.score += delta;
+                // Play different sounds for increment vs decrement
+                if (delta > 0) {
+                    playChirpSound(this.colorIndex);
+                } else {
+                    playDownSound(this.colorIndex);
+                }
+            }
+
+            draw(ctx) {
+                // Draw main circle
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.8;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Draw score text (use monospace for consistent centering)
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 32px "SF Mono", "Monaco", "Menlo", monospace';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // For negative numbers, manually offset to keep visual center
+                const scoreText = this.score.toString();
+                const isNegative = this.score < 0;
+                const offsetX = isNegative ? -4 : 0; // Slight left offset for negative numbers
+                ctx.fillText(scoreText, this.x + offsetX, this.y);
+
+                // Draw buttons as arc segments
+                this.drawButtons(ctx);
+            }
+
+            drawButtons(ctx) {
+                const buttons = [
+                    { label: '+1', value: 1, angle: -Math.PI / 2 - 0.75 },
+                    { label: '+5', value: 5, angle: -Math.PI / 2 },
+                    { label: '+10', value: 10, angle: -Math.PI / 2 + 0.75 },
+                    { label: '', value: 0, angle: -Math.PI / 2 + 1.5 }, // Spacer
+                    { label: '-1', value: -1, angle: Math.PI / 2 - 0.75 },
+                    { label: '-5', value: -5, angle: Math.PI / 2 },
+                    { label: '-10', value: -10, angle: Math.PI / 2 + 0.75 },
+                    { label: '', value: 0, angle: Math.PI / 2 + 1.5 }  // Spacer
+                ];
+
+                const innerRadius = this.buttonDistance - this.buttonThickness / 2;
+                const outerRadius = this.buttonDistance + this.buttonThickness / 2;
+
+                // Calculate gutter size between buttons
+                const buttonSpacing = 0.75; // Angular spacing between button centers
+                const gutterSize = buttonSpacing - this.buttonArcLength;
+
+                ctx.save();
+                ctx.translate(this.x, this.y);
+
+                ctx.globalAlpha = 1;
+
+                // Draw interactive buttons and spacers
+                buttons.forEach(button => {
+                    // Check if this is a spacer (empty label and value 0)
+                    const isSpacer = button.label === '' && button.value === 0;
+
+                    let startAngle, endAngle;
+
+                    if (isSpacer) {
+                        // Calculate spacer arc length to fill remaining space on the side
+                        // Right side spacer (angle 1.5 from top, approximately 0 radians or right side)
+                        if (Math.abs(button.angle - (-Math.PI / 2 + 1.5)) < 0.1) {
+                            // Right side: from end of +10 button to start of -1 button
+                            startAngle = -Math.PI / 2 + 0.75 + this.buttonArcLength / 2 + gutterSize;
+                            endAngle = Math.PI / 2 - 0.75 - this.buttonArcLength / 2 - gutterSize;
+                        } else {
+                            // Left side: from end of -10 button to start of +1 button
+                            startAngle = Math.PI / 2 + 0.75 + this.buttonArcLength / 2 + gutterSize;
+                            endAngle = -Math.PI / 2 - 0.75 - this.buttonArcLength / 2 - gutterSize + 2 * Math.PI;
+                        }
+                    } else {
+                        // Regular button uses standard arc length
+                        startAngle = button.angle - this.buttonArcLength / 2;
+                        endAngle = button.angle + this.buttonArcLength / 2;
+                    }
+
+                    // Create arc path
+                    ctx.beginPath();
+                    ctx.arc(0, 0, outerRadius, startAngle, endAngle);
+                    ctx.arc(0, 0, innerRadius, endAngle, startAngle, true);
+                    ctx.closePath();
+
+                    // Fill button/spacer
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = isSpacer ? 0.3 : 0.7; // Spacers are more transparent
+                    ctx.fill();
+
+                    // Stroke button/spacer
+                    ctx.globalAlpha = isSpacer ? 0.5 : 1; // Spacers have semi-transparent outline
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // Draw button label (only for non-spacers)
+                    if (!isSpacer) {
+                        const labelAngle = button.angle;
+                        const labelX = Math.cos(labelAngle) * this.buttonDistance;
+                        const labelY = Math.sin(labelAngle) * this.buttonDistance;
+
+                        ctx.globalAlpha = 1;
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(button.label, labelX, labelY);
+                    }
+                });
+
+                ctx.restore();
+            }
+        }
+
+        // Reset button at bottom of screen
+        class ResetButton {
+            constructor() {
+                this.width = 120;
+                this.height = 50;
+                this.x = 0; // Will be centered
+                this.y = 0; // Will be positioned at bottom
+            }
+
+            updatePosition(canvasWidth, canvasHeight) {
+                this.x = canvasWidth / 2 - this.width / 2;
+                // Use larger bottom offset for mobile to account for browser chrome
+                const bottomOffset = 80;
+                this.y = canvasHeight - this.height - bottomOffset;
+            }
+
+            containsPoint(x, y) {
+                return x >= this.x && x <= this.x + this.width &&
+                       y >= this.y && y <= this.y + this.height;
+            }
+
+            draw(ctx, canvasWidth, canvasHeight) {
+                this.updatePosition(canvasWidth, canvasHeight);
+
+                // Draw button background (transparent)
+                ctx.globalAlpha = 1;
+
+                // Draw button outline (dark grey)
+                ctx.strokeStyle = '#444444';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(this.x, this.y, this.width, this.height, 10);
+                ctx.stroke();
+
+                // Draw button text (lighter grey)
+                ctx.fillStyle = '#888888';
+                ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('RESET', this.x + this.width / 2, this.y + this.height / 2);
+
+                ctx.globalAlpha = 1;
+            }
+        }
+
         let touchTargets = new Map();
         let lastTouchChange = 0;
         let inactivityTimer = null;
@@ -403,7 +563,13 @@ type: apps
         let gameOver = false;
         let losingTargets = []; // Store losing targets for shrink animation
         let winnerAnimationCompleteTime = null; // Track when winner animation completes
-        const POST_ANIMATION_DELAY = 5000; // 5 seconds after animation ends
+        const POST_ANIMATION_DELAY = 2000; // 2 seconds after animation ends before transitioning to score mode
+
+        // Score tracking mode
+        let scoreTrackingMode = false;
+        let scoreCircles = [];
+        let resetButton = new ResetButton();
+        let draggedCircle = null;
 
         function allocateColor() {
             // Find the first unallocated color
@@ -455,6 +621,11 @@ type: apps
             // Play ta-da chime
             playTadaChime();
 
+            // Save all touch targets as score circles for later
+            scoreCircles = targetsArray.map(target =>
+                new ScoreCircle(target.id, target.x, target.y, target.color, target.colorIndex)
+            );
+
             // Mark losing targets for shrinking animation
             losingTargets = targetsArray.filter(t => t.id !== selectedWinner.id);
             losingTargets.forEach(t => t.shrinking = true);
@@ -474,6 +645,10 @@ type: apps
             losingTargets = [];
             allocatedColorIndices = []; // Clear color allocations
             gameOver = false;
+            scoreTrackingMode = false;
+            scoreCircles = [];
+            draggedCircle = null;
+
             clearTimeout(inactivityTimer);
             lastTouchChange = 0;
             winnerAnimationCompleteTime = null;
@@ -496,8 +671,65 @@ type: apps
             playDownSound(colorIndex);
         }
 
+        // Touch event handlers for score tracking mode
+        function handleScoreModeTouch(x, y) {
+            // Check if reset button was clicked
+            if (resetButton.containsPoint(x, y)) {
+                resetGame();
+                return true;
+            }
+
+            // Check if any score circle button was clicked
+            for (let circle of scoreCircles) {
+                const buttonValue = circle.getButtonAt(x, y);
+                if (buttonValue !== null) {
+                    circle.adjustScore(buttonValue);
+                    return true;
+                }
+            }
+
+            // Check if dragging a score circle
+            for (let circle of scoreCircles) {
+                if (circle.containsPoint(x, y)) {
+                    draggedCircle = circle;
+                    circle.isDragging = true;
+                    circle.dragOffsetX = x - circle.x;
+                    circle.dragOffsetY = y - circle.y;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function handleScoreModeDrag(x, y) {
+            if (draggedCircle && draggedCircle.isDragging) {
+                draggedCircle.x = x - draggedCircle.dragOffsetX;
+                draggedCircle.y = y - draggedCircle.dragOffsetY;
+                return true;
+            }
+            return false;
+        }
+
+        function handleScoreModeRelease() {
+            if (draggedCircle) {
+                draggedCircle.isDragging = false;
+                draggedCircle = null;
+                return true;
+            }
+            return false;
+        }
+
         // Touch event handlers
         document.addEventListener('touchstart', (e) => {
+            if (scoreTrackingMode) {
+                const touch = e.touches[0];
+                if (handleScoreModeTouch(touch.clientX, touch.clientY)) {
+                    e.preventDefault();
+                }
+                return;
+            }
+
             if (gameOver) return;
 
             for (let touch of e.touches) {
@@ -517,6 +749,14 @@ type: apps
         }, false);
 
         document.addEventListener('touchmove', (e) => {
+            if (scoreTrackingMode) {
+                const touch = e.touches[0];
+                if (handleScoreModeDrag(touch.clientX, touch.clientY)) {
+                    e.preventDefault();
+                }
+                return;
+            }
+
             if (gameOver) return;
 
             for (let touch of e.touches) {
@@ -529,6 +769,11 @@ type: apps
         }, false);
 
         document.addEventListener('touchend', (e) => {
+            if (scoreTrackingMode) {
+                handleScoreModeRelease();
+                return;
+            }
+
             if (gameOver) return;
 
             for (let touch of e.changedTouches) {
@@ -550,6 +795,11 @@ type: apps
         }, false);
 
         document.addEventListener('touchcancel', (e) => {
+            if (scoreTrackingMode) {
+                handleScoreModeRelease();
+                return;
+            }
+
             if (gameOver) return;
 
             for (let touch of e.changedTouches) {
@@ -574,6 +824,12 @@ type: apps
         let isMouseDown = false;
         let mouseColorIndex = 0;
         document.addEventListener('mousedown', (e) => {
+            if (scoreTrackingMode) {
+                handleScoreModeTouch(e.clientX, e.clientY);
+                isMouseDown = true;
+                return;
+            }
+
             if (gameOver) return;
             isMouseDown = true;
             if (!touchTargets.has('mouse')) {
@@ -591,6 +847,13 @@ type: apps
         });
 
         document.addEventListener('mousemove', (e) => {
+            if (scoreTrackingMode) {
+                if (isMouseDown) {
+                    handleScoreModeDrag(e.clientX, e.clientY);
+                }
+                return;
+            }
+
             if (!isMouseDown || gameOver) return;
             if (touchTargets.has('mouse')) {
                 const target = touchTargets.get('mouse');
@@ -600,6 +863,12 @@ type: apps
         });
 
         document.addEventListener('mouseup', (e) => {
+            if (scoreTrackingMode) {
+                handleScoreModeRelease();
+                isMouseDown = false;
+                return;
+            }
+
             isMouseDown = false;
             if (gameOver) return;
             const target = touchTargets.get('mouse');
@@ -621,6 +890,22 @@ type: apps
         // Animation loop
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Score tracking mode
+            if (scoreTrackingMode) {
+                // Draw all score circles
+                scoreCircles.forEach(circle => {
+                    circle.draw(ctx);
+                });
+
+                // Draw reset button (use getBoundingClientRect for actual viewport dimensions)
+                const rect = canvas.getBoundingClientRect();
+                resetButton.draw(ctx, rect.width, rect.height);
+
+                ctx.globalAlpha = 1;
+                requestAnimationFrame(animate);
+                return;
+            }
 
             // Update and draw touch targets (only shown before game over)
             if (!gameOver) {
@@ -657,17 +942,13 @@ type: apps
                 target.draw(ctx, false); // Don't show spinner for losers
             });
 
-            // Check if we should reset after post-animation delay
+            // Check if we should transition to score tracking after post-animation delay
             if (winnerAnimationCompleteTime && Date.now() - winnerAnimationCompleteTime >= POST_ANIMATION_DELAY) {
-                // Draw the final winner display for the remaining delay time
-                if (winnerAnimation) {
-                    winnerAnimation.progress = winnerAnimation.duration; // Keep animation at end state
-                    winnerAnimation.draw(ctx);
-                    if (selectedWinner) {
-                        selectedWinner.update();
-                        selectedWinner.draw(ctx, false);
-                    }
-                }
+                // Transition to score tracking mode
+                scoreTrackingMode = true;
+                winnerAnimation = null;
+                losingTargets = [];
+                updateDebugInfo('Score tracking mode - drag circles to reposition');
             } else if (winnerAnimationCompleteTime) {
                 // During the delay, continue drawing the final animation state
                 if (winnerAnimation) {
@@ -678,12 +959,6 @@ type: apps
                         selectedWinner.draw(ctx, false);
                     }
                 }
-            }
-
-            // Final reset after delay
-            if (winnerAnimationCompleteTime && Date.now() - winnerAnimationCompleteTime >= POST_ANIMATION_DELAY) {
-                winnerAnimation = null;
-                resetGame();
             }
 
             ctx.globalAlpha = 1;
