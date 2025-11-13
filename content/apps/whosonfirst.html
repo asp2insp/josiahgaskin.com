@@ -164,6 +164,55 @@ type: apps
             }
         }
 
+        // Play a "ta-da" chime sound for winner announcement
+        function playTadaChime() {
+            try {
+                const now = audioContext.currentTime;
+                const baseFreq = 520; // G5 note
+                const midFreq = 659;  // E5 note
+                const highFreq = 784; // G5 note (higher)
+
+                // Create reverb
+                const reverb = createReverbNode();
+                reverb.output.connect(audioContext.destination);
+
+                // First note: G5 (0.15s)
+                const osc1 = audioContext.createOscillator();
+                const gain1 = audioContext.createGain();
+                osc1.connect(gain1);
+                gain1.connect(reverb.input);
+                osc1.frequency.value = baseFreq;
+                gain1.gain.setValueAtTime(0.5, now);
+                gain1.gain.exponentialRampToValueAtTime(0.1, now + 0.15);
+                osc1.start(now);
+                osc1.stop(now + 0.15);
+
+                // Second note: E5 (0.1s, starts after first)
+                const osc2 = audioContext.createOscillator();
+                const gain2 = audioContext.createGain();
+                osc2.connect(gain2);
+                gain2.connect(reverb.input);
+                osc2.frequency.value = midFreq;
+                gain2.gain.setValueAtTime(0.5, now + 0.15);
+                gain2.gain.exponentialRampToValueAtTime(0.1, now + 0.35);
+                osc2.start(now + 0.15);
+                osc2.stop(now + 0.35);
+
+                // Third note: G5 high (0.25s, starts after second)
+                const osc3 = audioContext.createOscillator();
+                const gain3 = audioContext.createGain();
+                osc3.connect(gain3);
+                gain3.connect(reverb.input);
+                osc3.frequency.value = highFreq;
+                gain3.gain.setValueAtTime(0.5, now + 0.35);
+                gain3.gain.exponentialRampToValueAtTime(0.05, now + 0.6);
+                osc3.start(now + 0.35);
+                osc3.stop(now + 0.6);
+            } catch (e) {
+                // Audio context may not be available on all platforms
+            }
+        }
+
         // Set canvas size with correct aspect ratio
         function resizeCanvas() {
             const rect = canvas.getBoundingClientRect();
@@ -402,6 +451,9 @@ type: apps
             selectedWinner = targetsArray[randomIndex];
 
             updateDebugInfo(`🎉 Winner selected! (color index: ${selectedWinner.colorIndex})`);
+
+            // Play ta-da chime
+            playTadaChime();
 
             // Mark losing targets for shrinking animation
             losingTargets = targetsArray.filter(t => t.id !== selectedWinner.id);
