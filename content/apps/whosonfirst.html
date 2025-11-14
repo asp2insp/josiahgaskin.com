@@ -612,6 +612,7 @@ type: apps
                 this.confirmStartTime = 0; // When confirm state started
                 this.confirmTimeout = 2000; // 2 seconds to confirm
                 this.confirmTimer = null; // Timer for auto-reset
+                this.hasReleasedSinceConfirm = false; // Track if touch was released since entering confirm state
             }
 
             updatePosition(canvasWidth, canvasHeight) {
@@ -626,14 +627,15 @@ type: apps
                        y >= this.y && y <= this.y + this.height;
             }
 
-            handleClick() {
-                if (this.isConfirming) {
-                    // Second click - confirm reset
+            handleTouchDown() {
+                if (this.isConfirming && this.hasReleasedSinceConfirm) {
+                    // Second touch-down on button while confirming and after release - confirm reset
                     this.resetConfirmState();
                     return 'confirm';
-                } else {
-                    // First click - enter confirm state
+                } else if (!this.isConfirming) {
+                    // First touch-down - enter confirm state
                     this.isConfirming = true;
+                    this.hasReleasedSinceConfirm = false;
                     this.confirmStartTime = Date.now();
 
                     // Set auto-cancel timer
@@ -646,10 +648,19 @@ type: apps
 
                     return 'pending';
                 }
+                return 'ignored';
+            }
+
+            handleTouchUp() {
+                if (this.isConfirming) {
+                    // Mark that user has released the touch
+                    this.hasReleasedSinceConfirm = true;
+                }
             }
 
             resetConfirmState() {
                 this.isConfirming = false;
+                this.hasReleasedSinceConfirm = false;
                 this.confirmStartTime = 0;
                 if (this.confirmTimer) {
                     clearTimeout(this.confirmTimer);
@@ -830,9 +841,9 @@ type: apps
 
         // Touch event handlers for score tracking mode
         function handleScoreModeTouch(x, y) {
-            // Check if reset button was clicked
+            // Check if reset button was touched
             if (resetButton.containsPoint(x, y)) {
-                const result = resetButton.handleClick();
+                const result = resetButton.handleTouchDown();
                 if (result === 'confirm') {
                     // Only reset if confirmed
                     resetGame();
@@ -976,6 +987,8 @@ type: apps
         document.addEventListener('touchend', (e) => {
             if (scoreTrackingMode) {
                 handleScoreModeRelease();
+                // Notify reset button of touch release in score tracking mode
+                resetButton.handleTouchUp();
                 return;
             }
 
