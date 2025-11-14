@@ -648,6 +648,7 @@ type: apps
         let scoreCircles = [];
         let resetButton = new ResetButton();
         let draggedCircle = null;
+        let isNamePromptOpen = false; // Flag to prevent duplicate name prompts
 
         function allocateColor() {
             // Find the first unallocated color
@@ -734,6 +735,7 @@ type: apps
             scoreTrackingMode = false;
             scoreCircles = [];
             draggedCircle = null;
+            isNamePromptOpen = false; // Clear prompt flag
 
             clearTimeout(inactivityTimer);
             lastTouchChange = 0;
@@ -773,6 +775,11 @@ type: apps
             // Check if any score circle name field was clicked
             for (let circle of scoreCircles) {
                 if (circle.isNameFieldAt(x, y)) {
+                    // Don't open a new prompt if one is already open
+                    if (isNamePromptOpen) {
+                        return true;
+                    }
+
                     // Debounce: check if enough time has passed since last name edit
                     const now = Date.now();
                     if (now - circle.lastNameEditTime < circle.nameEditDebounceDelay) {
@@ -780,6 +787,7 @@ type: apps
                     }
                     circle.lastNameEditTime = now;
 
+                    isNamePromptOpen = true;
                     circle.isEditingName = true;
                     circle.nameInputValue = circle.playerName;
                     // Prompt for name edit
@@ -788,6 +796,7 @@ type: apps
                         circle.playerName = newName.trim();
                     }
                     circle.isEditingName = false;
+                    isNamePromptOpen = false;
                     return true;
                 }
             }
