@@ -448,6 +448,8 @@ type: apps
                 this.lastButtonPressTime = now;
 
                 this.score += delta;
+                // Save state whenever score changes
+                saveScoreState();
                 // Play different sounds for increment vs decrement
                 if (delta > 0) {
                     playChirpSound(this.colorIndex);
@@ -628,7 +630,7 @@ type: apps
             }
 
             handleTouchDown() {
-                if (this.isConfirming && this.hasReleasedSinceConfirm) {
+                if (this.isConfirming && this.hasReleasedSinceConfirm && Date.now() - this.confirmStartTime > 200) {
                     // Second touch-down on button while confirming and after release - confirm reset
                     this.resetConfirmState();
                     return 'confirm';
@@ -723,6 +725,67 @@ type: apps
         let isNamePromptOpen = false; // Flag to prevent duplicate name prompts
         let nameEditingCircleId = null; // Track which circle is being edited
 
+        // Local storage functions for score persistence
+        const STORAGE_KEY = 'whosonfirst_scores';
+
+        function saveScoreState() {
+            if (scoreCircles.length === 0) return;
+
+            const state = scoreCircles.map(circle => ({
+                playerNumber: circle.playerNumber,
+                playerName: circle.playerName,
+                score: circle.score,
+                colorIndex: circle.colorIndex,
+                x: circle.x,
+                y: circle.y
+            }));
+
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                // Local storage may be unavailable
+            }
+        }
+
+        function loadScoreState() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (!stored) return null;
+
+                const state = JSON.parse(stored);
+                // Recreate score circles from stored state
+                scoreCircles = state.map(data =>
+                    new ScoreCircle(
+                        `saved_${data.playerNumber}`,
+                        data.x,
+                        data.y,
+                        colors[data.colorIndex % colors.length],
+                        data.colorIndex,
+                        data.playerNumber
+                    )
+                );
+
+                // Restore score and name for each circle
+                for (let i = 0; i < scoreCircles.length; i++) {
+                    scoreCircles[i].score = state[i].score;
+                    scoreCircles[i].playerName = state[i].playerName;
+                }
+
+                return scoreCircles;
+            } catch (e) {
+                // Stored data may be corrupted
+                return null;
+            }
+        }
+
+        function clearScoreState() {
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (e) {
+                // Local storage may be unavailable
+            }
+        }
+
         function allocateColor() {
             // Find the first unallocated color
             for (let i = 0; i < colors.length; i++) {
@@ -811,6 +874,7 @@ type: apps
             isNamePromptOpen = false; // Clear prompt flag
             nameEditingCircleId = null; // Clear circle editing flag
             resetButton.resetConfirmState(); // Clear reset button confirm state
+            clearScoreState(); // Clear persisted score state
 
             clearTimeout(inactivityTimer);
             lastTouchChange = 0;
@@ -874,6 +938,8 @@ type: apps
                     const newName = prompt('Enter player name:', circle.playerName);
                     if (newName !== null && newName.trim() !== '') {
                         circle.playerName = newName.trim();
+                        // Save state whenever name changes
+                        saveScoreState();
                     }
                     circle.isEditingName = false;
                     isNamePromptOpen = false;
@@ -912,6 +978,8 @@ type: apps
             if (draggedCircle && draggedCircle.isDragging) {
                 draggedCircle.x = x - draggedCircle.dragOffsetX;
                 draggedCircle.y = y - draggedCircle.dragOffsetY;
+                // Save state whenever position changes
+                saveScoreState();
                 return true;
             }
             return false;
@@ -1183,6 +1251,13 @@ type: apps
 
             ctx.globalAlpha = 1;
             requestAnimationFrame(animate);
+        }
+
+        // Load saved score state if available
+        const savedState = loadScoreState();
+        if (savedState && savedState.length > 0) {
+            scoreTrackingMode = true;
+            updateDebugInfo('Score tracking mode - drag circles to reposition');
         }
 
         animate();
