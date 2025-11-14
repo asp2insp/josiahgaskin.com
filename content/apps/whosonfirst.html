@@ -164,6 +164,19 @@ type: apps
             }
         }
 
+        // Initialize audio on first user interaction
+        let audioInitialized = false;
+        async function initializeAudio() {
+            if (!audioInitialized) {
+                try {
+                    await Tone.start();
+                    audioInitialized = true;
+                } catch (e) {
+                    // Audio may not be available on all platforms
+                }
+            }
+        }
+
         // Set canvas size with correct aspect ratio
         function resizeCanvas() {
             const rect = canvas.getBoundingClientRect();
@@ -853,6 +866,8 @@ type: apps
         function hideTapToStart() {
             if (tapToStartDiv && !tapToStartDiv.classList.contains('hidden')) {
                 tapToStartDiv.classList.add('hidden');
+                // Initialize audio on first user interaction
+                initializeAudio();
             }
         }
 
