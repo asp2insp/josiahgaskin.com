@@ -348,7 +348,7 @@ type: apps
 
         // Score tracker for each player
         class ScoreCircle {
-            constructor(id, x, y, color, colorIndex) {
+            constructor(id, x, y, color, colorIndex, playerNumber = 1) {
                 this.id = id;
                 this.x = x;
                 this.y = y;
@@ -364,6 +364,10 @@ type: apps
                 this.dragOffsetY = 0;
                 this.lastButtonPressTime = 0; // For debouncing
                 this.buttonDebounceDelay = 150; // 150ms debounce
+                this.playerNumber = playerNumber;
+                this.playerName = `Player ${playerNumber}`;
+                this.isEditingName = false;
+                this.nameInputValue = this.playerName;
             }
 
             // Check if point is inside the main circle
@@ -371,6 +375,17 @@ type: apps
                 const dx = x - this.x;
                 const dy = y - this.y;
                 return Math.sqrt(dx * dx + dy * dy) <= this.radius;
+            }
+
+            // Check if point is on the name field (below the circle)
+            isNameFieldAt(x, y) {
+                const nameY = this.y + this.radius + 30;
+                const nameHeight = 20;
+                const nameWidth = 120;
+                const nameX = this.x - nameWidth / 2;
+
+                return x >= nameX && x <= nameX + nameWidth &&
+                       y >= nameY - nameHeight / 2 && y <= nameY + nameHeight / 2;
             }
 
             // Check if point is on an arc button and return the button value
@@ -452,6 +467,35 @@ type: apps
                 const isNegative = this.score < 0;
                 const offsetX = isNegative ? -4 : 0; // Slight left offset for negative numbers
                 ctx.fillText(scoreText, this.x + offsetX, this.y);
+
+                // Draw player name field below circle
+                const nameY = this.y + this.radius + 30;
+                const nameWidth = 120;
+                const nameHeight = 20;
+                const nameX = this.x - nameWidth / 2;
+
+                // Draw name background box
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.roundRect(nameX, nameY - nameHeight / 2, nameWidth, nameHeight, 4);
+                ctx.fill();
+
+                // Draw name border
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.roundRect(nameX, nameY - nameHeight / 2, nameWidth, nameHeight, 4);
+                ctx.stroke();
+
+                // Draw name text
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.globalAlpha = 0.9;
+                ctx.fillText(this.playerName, this.x, nameY);
 
                 // Draw buttons as arc segments
                 this.drawButtons(ctx);
@@ -653,9 +697,17 @@ type: apps
             // Play ta-da chime
             playTadaChime();
 
-            // Save all touch targets as score circles for later
-            scoreCircles = targetsArray.map(target =>
-                new ScoreCircle(target.id, target.x, target.y, target.color, target.colorIndex)
+            // Create randomized player order for turn order display
+            const playerNumbers = Array.from({length: targetsArray.length}, (_, i) => i + 1);
+            // Shuffle player numbers
+            for (let i = playerNumbers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [playerNumbers[i], playerNumbers[j]] = [playerNumbers[j], playerNumbers[i]];
+            }
+
+            // Save all touch targets as score circles for later with randomized player numbers
+            scoreCircles = targetsArray.map((target, index) =>
+                new ScoreCircle(target.id, target.x, target.y, target.color, target.colorIndex, playerNumbers[index])
             );
 
             // Mark losing targets for shrinking animation
@@ -714,6 +766,21 @@ type: apps
             if (resetButton.containsPoint(x, y)) {
                 resetGame();
                 return true;
+            }
+
+            // Check if any score circle name field was clicked
+            for (let circle of scoreCircles) {
+                if (circle.isNameFieldAt(x, y)) {
+                    circle.isEditingName = true;
+                    circle.nameInputValue = circle.playerName;
+                    // Prompt for name edit
+                    const newName = prompt('Enter player name:', circle.playerName);
+                    if (newName !== null && newName.trim() !== '') {
+                        circle.playerName = newName.trim();
+                    }
+                    circle.isEditingName = false;
+                    return true;
+                }
             }
 
             // Check if any score circle button was clicked
