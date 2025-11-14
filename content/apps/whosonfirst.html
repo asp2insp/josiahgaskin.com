@@ -368,6 +368,8 @@ type: apps
                 this.playerName = `Player ${playerNumber}`;
                 this.isEditingName = false;
                 this.nameInputValue = this.playerName;
+                this.lastNameEditTime = 0; // For debouncing name edits
+                this.nameEditDebounceDelay = 300; // 300ms debounce for name edits
             }
 
             // Check if point is inside the main circle
@@ -379,7 +381,7 @@ type: apps
 
             // Check if point is on the name field (below the circle)
             isNameFieldAt(x, y) {
-                const nameY = this.y + this.radius + 30;
+                const nameY = this.y + this.radius + 60; // Moved down to avoid button collision
                 const nameHeight = 20;
                 const nameWidth = 120;
                 const nameX = this.x - nameWidth / 2;
@@ -469,7 +471,7 @@ type: apps
                 ctx.fillText(scoreText, this.x + offsetX, this.y);
 
                 // Draw player name field below circle
-                const nameY = this.y + this.radius + 30;
+                const nameY = this.y + this.radius + 60; // Moved down to avoid button collision
                 const nameWidth = 120;
                 const nameHeight = 20;
                 const nameX = this.x - nameWidth / 2;
@@ -771,6 +773,13 @@ type: apps
             // Check if any score circle name field was clicked
             for (let circle of scoreCircles) {
                 if (circle.isNameFieldAt(x, y)) {
+                    // Debounce: check if enough time has passed since last name edit
+                    const now = Date.now();
+                    if (now - circle.lastNameEditTime < circle.nameEditDebounceDelay) {
+                        return true; // Ignore this press, too soon after last one
+                    }
+                    circle.lastNameEditTime = now;
+
                     circle.isEditingName = true;
                     circle.nameInputValue = circle.playerName;
                     // Prompt for name edit
