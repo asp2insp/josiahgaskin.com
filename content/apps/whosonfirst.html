@@ -800,7 +800,10 @@ type: apps
                     }
                     circle.isEditingName = false;
                     isNamePromptOpen = false;
-                    nameEditingCircleId = null;
+                    // Clear circle ID after a brief delay to ensure mousedown doesn't fire again
+                    setTimeout(() => {
+                        nameEditingCircleId = null;
+                    }, 50);
                     return true;
                 }
             }
@@ -859,9 +862,8 @@ type: apps
 
             if (scoreTrackingMode) {
                 const touch = e.touches[0];
-                if (handleScoreModeTouch(touch.clientX, touch.clientY)) {
-                    e.preventDefault();
-                }
+                handleScoreModeTouch(touch.clientX, touch.clientY);
+                e.preventDefault(); // Always prevent default in score mode to block mouse events
                 return;
             }
 
