@@ -608,6 +608,10 @@ type: apps
                 this.height = 50;
                 this.x = 0; // Will be centered
                 this.y = 0; // Will be positioned at bottom
+                this.isConfirming = false; // Whether button is in confirm state
+                this.confirmStartTime = 0; // When confirm state started
+                this.confirmTimeout = 2000; // 2 seconds to confirm
+                this.confirmTimer = null; // Timer for auto-reset
             }
 
             updatePosition(canvasWidth, canvasHeight) {
@@ -622,25 +626,69 @@ type: apps
                        y >= this.y && y <= this.y + this.height;
             }
 
+            handleClick() {
+                if (this.isConfirming) {
+                    // Second click - confirm reset
+                    this.resetConfirmState();
+                    return 'confirm';
+                } else {
+                    // First click - enter confirm state
+                    this.isConfirming = true;
+                    this.confirmStartTime = Date.now();
+
+                    // Set auto-cancel timer
+                    if (this.confirmTimer) {
+                        clearTimeout(this.confirmTimer);
+                    }
+                    this.confirmTimer = setTimeout(() => {
+                        this.resetConfirmState();
+                    }, this.confirmTimeout);
+
+                    return 'pending';
+                }
+            }
+
+            resetConfirmState() {
+                this.isConfirming = false;
+                this.confirmStartTime = 0;
+                if (this.confirmTimer) {
+                    clearTimeout(this.confirmTimer);
+                    this.confirmTimer = null;
+                }
+            }
+
             draw(ctx, canvasWidth, canvasHeight) {
                 this.updatePosition(canvasWidth, canvasHeight);
 
                 // Draw button background (transparent)
                 ctx.globalAlpha = 1;
 
-                // Draw button outline (dark grey)
-                ctx.strokeStyle = '#444444';
-                ctx.lineWidth = 2;
+                // Draw button outline - change color if confirming
+                if (this.isConfirming) {
+                    ctx.strokeStyle = '#FF6600'; // Orange when confirming
+                    ctx.lineWidth = 3;
+                } else {
+                    ctx.strokeStyle = '#444444'; // Dark grey normally
+                    ctx.lineWidth = 2;
+                }
                 ctx.beginPath();
                 ctx.roundRect(this.x, this.y, this.width, this.height, 10);
                 ctx.stroke();
 
-                // Draw button text (lighter grey)
-                ctx.fillStyle = '#888888';
-                ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('RESET', this.x + this.width / 2, this.y + this.height / 2);
+                // Draw button text - change text and color if confirming
+                if (this.isConfirming) {
+                    ctx.fillStyle = '#FF6600';
+                    ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('CONFIRM?', this.x + this.width / 2, this.y + this.height / 2);
+                } else {
+                    ctx.fillStyle = '#888888';
+                    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('RESET', this.x + this.width / 2, this.y + this.height / 2);
+                }
 
                 ctx.globalAlpha = 1;
             }
@@ -751,6 +799,7 @@ type: apps
             draggedCircle = null;
             isNamePromptOpen = false; // Clear prompt flag
             nameEditingCircleId = null; // Clear circle editing flag
+            resetButton.resetConfirmState(); // Clear reset button confirm state
 
             clearTimeout(inactivityTimer);
             lastTouchChange = 0;
@@ -783,7 +832,11 @@ type: apps
         function handleScoreModeTouch(x, y) {
             // Check if reset button was clicked
             if (resetButton.containsPoint(x, y)) {
-                resetGame();
+                const result = resetButton.handleClick();
+                if (result === 'confirm') {
+                    // Only reset if confirmed
+                    resetGame();
+                }
                 return true;
             }
 
