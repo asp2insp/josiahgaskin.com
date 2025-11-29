@@ -164,6 +164,28 @@ type: apps
             }
         }
 
+        // Play a rising tone warning (plays during last 500ms before winner selection)
+        let risingToneOscillator = null;
+        let risingToneGain = null;
+        async function playRisingToneWarning() {
+            try {
+                await Tone.start();
+                const now = Tone.now();
+
+                // Play a rapid ascending scale over 500ms (0.5 seconds)
+                // Using notes from the major scale
+                const warningNotes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+                const noteCount = warningNotes.length;
+                const noteDuration = 0.5 / noteCount; // Each note plays for 1/8th of 500ms
+
+                for (let i = 0; i < noteCount; i++) {
+                    bellSynth.triggerAttackRelease(warningNotes[i], `${(noteDuration * 1000).toFixed(0)}ms`, now + (i * noteDuration));
+                }
+            } catch (e) {
+                // Audio may not be available on all platforms
+            }
+        }
+
         // Initialize audio on first user interaction
         let audioInitialized = false;
         async function initializeAudio() {
@@ -710,6 +732,7 @@ type: apps
         let touchTargets = new Map();
         let lastTouchChange = 0;
         let inactivityTimer = null;
+        let risingToneTimer = null; // Timer for scheduling the rising tone warning
         let selectedWinner = null;
         let winnerAnimation = null;
         let gameOver = false;
@@ -813,9 +836,17 @@ type: apps
         function resetInactivityTimer() {
             lastTouchChange = Date.now();
             clearTimeout(inactivityTimer);
+            clearTimeout(risingToneTimer); // Cancel any pending rising tone
 
             if (touchTargets.size > 0 && !gameOver) {
                 updateDebugInfo(`${touchTargets.size} touch${touchTargets.size !== 1 ? 'es' : ''} - waiting 2s for winner...`);
+
+                // Schedule rising tone to play at 1.5 seconds (500ms before winner selection)
+                risingToneTimer = setTimeout(() => {
+                    playRisingToneWarning();
+                }, 1500);
+
+                // Schedule winner selection at 2 seconds
                 inactivityTimer = setTimeout(() => {
                     if (Date.now() - lastTouchChange >= 2000) {
                         selectWinner();
@@ -877,6 +908,7 @@ type: apps
             clearScoreState(); // Clear persisted score state
 
             clearTimeout(inactivityTimer);
+            clearTimeout(risingToneTimer); // Cancel any pending rising tone
             lastTouchChange = 0;
             winnerAnimationCompleteTime = null;
             updateDebugInfo('Touch the screen with multiple fingers to start');
@@ -991,6 +1023,8 @@ type: apps
                 draggedCircle = null;
                 return true;
             }
+            // Notify reset button of touch release in score tracking mode
+            resetButton.handleTouchUp();
             return false;
         }
 
@@ -1055,8 +1089,6 @@ type: apps
         document.addEventListener('touchend', (e) => {
             if (scoreTrackingMode) {
                 handleScoreModeRelease();
-                // Notify reset button of touch release in score tracking mode
-                resetButton.handleTouchUp();
                 return;
             }
 
@@ -1258,6 +1290,10 @@ type: apps
         if (savedState && savedState.length > 0) {
             scoreTrackingMode = true;
             updateDebugInfo('Score tracking mode - drag circles to reposition');
+            // Hide "tap to start" since we're hydrating with saved state
+            if (tapToStartDiv) {
+                tapToStartDiv.classList.add('hidden');
+            }
         }
 
         animate();
