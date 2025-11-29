@@ -53,7 +53,6 @@ def deploy_via_rsync(secrets):
         rsync_cmd = [
             "rsync",
             "-avz",
-            "--delete",
             f"{local_public}/",
             f"{username}@{host}:{destination}"
         ]
