@@ -7,8 +7,22 @@ Builds the Hugo site and deploys to remote host via rsync
 import os
 import sys
 import subprocess
-import toml
 from pathlib import Path
+
+try:  # Python 3.11+ has a TOML reader built in; the toml package is optional.
+    import tomllib as _toml
+
+    def _load_toml(f):
+        return _toml.load(f)
+
+    _TOML_MODE = "rb"
+except ImportError:  # pragma: no cover
+    import toml as _toml
+
+    def _load_toml(f):
+        return _toml.load(f)
+
+    _TOML_MODE = "r"
 
 def load_secrets():
     """Load deployment credentials from secrets.toml"""
@@ -17,8 +31,8 @@ def load_secrets():
         print(f"Error: secrets.toml not found at {secrets_path}")
         sys.exit(1)
 
-    with open(secrets_path, 'r') as f:
-        return toml.load(f)
+    with open(secrets_path, _TOML_MODE) as f:
+        return _load_toml(f)
 
 def build_hugo():
     """Run hugo build and return True if successful"""
