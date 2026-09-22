@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrabble Word Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+            text-transform: uppercase;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .pattern-help {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #findBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #findBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        #clearBtn {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        #clearBtn:hover {
+            background: #e0e0e0;
+        }
+
+        .loading-indicator, .searching-indicator {
+            text-align: center;
+            padding: 30px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .stats {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-size: 1.1rem;
+        }
+
+        .example {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .word-group {
+            margin-bottom: 25px;
+        }
+
+        .word-group h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .word-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: inline-block;
+        }
+
+        .word-score {
+            opacity: 0.85;
+            font-size: 0.85rem;
+        }
+
+        #sortToggle {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+            font-size: 0.95rem;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+
+        #sortToggle:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .info-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .info-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .info-section ul {
+            list-style-position: inside;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Scrabble Word Finder</h1>
+        <p class="subtitle">Find valid words using your letters and board positions</p>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="lettersInput">Your Letters (rack)</label>
+                <input
+                    type="text"
+                    id="lettersInput"
+                    placeholder="e.g., AEINRST or AEINR.. (use . for blanks)"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="input-group">
+                <label for="patternInput">Pattern (use . for empty, letters for fixed positions)</label>
+                <input
+                    type="text"
+                    id="patternInput"
+                    placeholder="e.g., ..T.. or C.R.. (optional)"
+                    autocomplete="off"
+                >
+                <div class="pattern-help">
+                    Leave blank to find all words, or use dots (.) for empty spaces, letters for fixed positions, and * for any number of spaces
+                </div>
+            </div>
+
+            <button id="sortToggle">Sort: Alphabetical</button>
+
+            <div class="button-group">
+                <button id="findBtn">Find Words</button>
+                <button id="clearBtn">Clear</button>
+            </div>
+        </div>
+
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading dictionary...</p>
+        </div>
+
+        <div id="searchingIndicator" class="searching-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Finding words...</p>
+        </div>
+
+        <div id="stats" class="stats" style="display: none;"></div>
+
+        <div id="results" class="results">
+            <div class="welcome-message">
+                Enter your letters and optional pattern to find valid Scrabble words!
+                <div class="example">
+                    <strong>Example 1:</strong> Letters: "AEINRST", Pattern: blank → finds all 7-letter words<br>
+                    <strong>Example 2:</strong> Letters: "EINR", Pattern: "..T.." → finds words with T in 3rd position<br>
+                    <strong>Example 3:</strong> Letters: "ART", Pattern: "C*" → finds words starting with C (CAR, CART, CARAT, etc.)<br>
+                    <strong>Example 4:</strong> Letters: "ABC.." → finds words using ABC and 2 blank tiles
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>How it works</h3>
+            <ul>
+                <li>Enter your available letters (your rack)</li>
+                <li>Use dots (.) in your letters to represent blank tiles (wildcards)</li>
+                <li>Optionally enter a pattern with fixed letters on the board</li>
+                <li>In patterns: dots (.) represent empty spaces you'll fill</li>
+                <li>Use asterisk (*) in patterns to match any number of spaces (e.g., C*T matches CAT, CART, CABINET)</li>
+                <li>Each word shows its Scrabble score (without bonus squares)</li>
+                <li>Toggle between sorting by word length or by score</li>
+                <li>Uses a dictionary of 370,000+ English words</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <p class="subtitle">Generate secure passwords and memorable passphrases</p>
+
+        <div class="mode-selector">
+            <button id="randomModeBtn" class="mode-btn active">Random Password</button>
+            <button id="passphraseBtn" class="mode-btn">Passphrase (XKCD)</button>
+        </div>
+
+        <!-- Random Password Mode -->
+        <div id="randomMode" class="generator-section">
+            <div class="slider-section">
+                <label for="lengthSlider">
+                    Password Length: <span id="lengthValue">16</span>
+                </label>
+                <input
+                    type="range"
+                    id="lengthSlider"
+                    min="8"
+                    max="64"
+                    value="16"
+                    class="slider"
+                >
+                <div class="slider-labels">
+                    <span>8</span>
+                    <span>64</span>
+                </div>
+            </div>
+
+            <div class="options-section">
+                <h3>Character Types</h3>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="uppercaseCheck" checked>
+                        <span>Uppercase Letters (A-Z)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="lowercaseCheck" checked>
+                        <span>Lowercase Letters (a-z)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="numbersCheck" checked>
+                        <span>Numbers (0-9)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="specialCheck" checked>
+                        <span>Special Characters (!@#$%^&*)</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Passphrase Mode -->
+        <div id="passphraseMode" class="generator-section" style="display: none;">
+            <div class="slider-section">
+                <label for="wordCountSlider">
+                    Number of Words: <span id="wordCountValue">4</span>
+                </label>
+                <input
+                    type="range"
+                    id="wordCountSlider"
+                    min="3"
+                    max="8"
+                    value="4"
+                    class="slider"
+                >
+                <div class="slider-labels">
+                    <span>3</span>
+                    <span>8</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="startingLettersInput">
+                    Starting Letters (optional)
+                </label>
+                <input
+                    type="text"
+                    id="startingLettersInput"
+                    placeholder="e.g., chbs for 4 words"
+                    autocomplete="off"
+                    maxlength="8"
+                >
+                <div class="input-help">
+                    Enter letters to specify the first letter of each word. Leave blank for random.
+                </div>
+            </div>
+
+            <div class="options-section">
+                <h3>Passphrase Options</h3>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="capitalizeCheck" checked>
+                        <span>Capitalize Words</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="separatorCheck" checked>
+                        <span>Use Separator (-)</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="numberSuffixCheck">
+                        <span>Add Number at End</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Inspired by XKCD 936:</strong> Four random common words can be easier to remember than a random password, yet still very secure.</p>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="output-section">
+            <div class="password-display" id="passwordDisplay">
+                Click "Generate" to create a password
+            </div>
+            <div class="button-group">
+                <button id="generateBtn" class="primary-btn">Generate</button>
+                <button id="copyBtn" class="secondary-btn">Copy</button>
+            </div>
+        </div>
+
+        <div class="strength-section" id="strengthSection" style="display: none;">
+            <div class="strength-label">Strength:</div>
+            <div class="strength-bar">
+                <div class="strength-fill" id="strengthFill"></div>
+            </div>
+            <div class="strength-text" id="strengthText"></div>
+        </div>
+
+        <div class="info-section">
+            <h3>Security Tips</h3>
+            <ul>
+                <li><strong>Length matters:</strong> Longer passwords are exponentially harder to crack</li>
+                <li><strong>Use unique passwords:</strong> Never reuse passwords across different sites</li>
+                <li><strong>Passphrases:</strong> Easy to remember, hard to crack - perfect for master passwords</li>
+                <li><strong>Store safely:</strong> Use a password manager to store your passwords securely</li>
+                <li><strong>Change regularly:</strong> Update passwords periodically, especially for sensitive accounts</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

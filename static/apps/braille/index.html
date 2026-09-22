@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braille Decoder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Braille Letter Decoder</h1>
+        <p class="subtitle">Click the dots to form a braille pattern</p>
+
+        <div class="braille-input">
+            <div class="braille-cell">
+                <div class="braille-column">
+                    <div class="dot" data-position="1"></div>
+                    <div class="dot" data-position="2"></div>
+                    <div class="dot" data-position="3"></div>
+                </div>
+                <div class="braille-column">
+                    <div class="dot" data-position="4"></div>
+                    <div class="dot" data-position="5"></div>
+                    <div class="dot" data-position="6"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-section">
+            <div class="letter-display" id="letterDisplay">?</div>
+            <button class="clear-btn" id="clearBtn">Clear</button>
+        </div>
+
+        <div class="info-section">
+            <h2>Braille Pattern Reference</h2>
+            <div class="reference-grid" id="referenceGrid"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

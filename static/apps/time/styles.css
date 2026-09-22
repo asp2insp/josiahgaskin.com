@@ -1,0 +1,237 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 1.1em;
+}
+
+.query-section {
+    margin-bottom: 40px;
+}
+
+.input-container {
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+#timeQuery {
+    width: 100%;
+    padding: 18px;
+    font-size: 1.2em;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#timeQuery:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.result-section {
+    min-height: 150px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 30px;
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.result-section.has-result {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.result-content {
+    text-align: center;
+}
+
+.result-prompt {
+    color: #666;
+    font-size: 1.1em;
+}
+
+.result-date {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.result-time {
+    font-size: 1.5em;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 15px;
+}
+
+.result-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.result-detail {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 12px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.detail-label {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 1.1em;
+    color: white;
+    font-weight: 600;
+}
+
+.result-error {
+    color: #dc3545;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.examples-section {
+    margin-bottom: 40px;
+}
+
+.examples-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.example-btn {
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.example-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.example-btn:active {
+    transform: translateY(0);
+}
+
+.info-section {
+    padding-top: 30px;
+    border-top: 2px solid #e9ecef;
+}
+
+.info-section h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.info-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-section li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    color: #666;
+}
+
+.info-section li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .result-date {
+        font-size: 1.8em;
+    }
+
+    .result-time {
+        font-size: 1.2em;
+    }
+
+    .examples-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-details {
+        grid-template-columns: 1fr;
+    }
+}
