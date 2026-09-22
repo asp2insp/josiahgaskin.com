@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Pattern Input</title>
+</head>
+<body>
+    <h1>Test Pattern Input</h1>
+    <input type="text" id="patternInput" placeholder="Type here" style="font-size: 20px; padding: 10px; width: 300px;">
+    <div id="output" style="margin-top: 20px; font-size: 18px;"></div>
+
+    <script>
+        const patternInput = document.getElementById('patternInput');
+        const output = document.getElementById('output');
+
+        patternInput.addEventListener('input', (e) => {
+            const before = e.target.value;
+            e.target.value = e.target.value.toUpperCase().replace(/[^A-Z\.\*]/g, '');
+            const after = e.target.value;
+
+            output.innerHTML = `
+                <div>Before: "${before}"</div>
+                <div>After: "${after}"</div>
+                <div>Contains *: ${after.includes('*')}</div>
+            `;
+        });
+    </script>
+</body>
+</html>

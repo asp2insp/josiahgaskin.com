@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagram Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Anagram Finder</h1>
+        <p class="subtitle">Enter letters to find all possible anagrams</p>
+
+        <div class="input-section">
+            <input
+                type="text"
+                id="lettersInput"
+                placeholder="Enter letters (e.g., listen)"
+                maxlength="30"
+                autocomplete="off"
+            >
+            <div class="checkbox-container">
+                <label>
+                    <input type="checkbox" id="partialMatchCheckbox">
+                    <span>Allow partial use of letters (find words using subset of letters)</span>
+                </label>
+            </div>
+            <button id="findBtn">Find Anagrams</button>
+            <button id="clearBtn" class="clear-btn">Clear</button>
+        </div>
+
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading dictionary...</p>
+        </div>
+
+        <div id="searchingIndicator" class="searching-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Searching for anagrams...</p>
+        </div>
+
+        <div id="stats" class="stats"></div>
+
+        <div id="results" class="results">
+            <div class="welcome-message">
+                Enter some letters above to find anagrams!
+                <div class="example">
+                    <strong>Example:</strong> "listen" will find "silent", "enlist", and more!
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>How it works</h3>
+            <ul>
+                <li>Enter any letters (2-30 characters)</li>
+                <li>By default, finds words using ALL letters exactly</li>
+                <li>Check "Allow partial use" to find words using a subset of letters</li>
+                <li>Shows single words, two-word, and three-word combinations</li>
+                <li>Uses a dictionary of 370,000+ English words</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morse Code Translator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Morse Code Translator</h1>
+        <p class="subtitle">Encode and decode morse code with audio playback</p>
+
+        <div class="translator-section">
+            <div class="mode-selector">
+                <button id="encodeBtn" class="mode-btn active">Encode to Morse</button>
+                <button id="decodeBtn" class="mode-btn">Decode from Morse</button>
+            </div>
+
+            <div class="input-output-container">
+                <div class="input-section">
+                    <label for="inputText">Input</label>
+                    <textarea
+                        id="inputText"
+                        placeholder="Enter text to encode..."
+                        rows="6"
+                    ></textarea>
+                    <div class="button-group">
+                        <button id="translateBtn" class="primary-btn">Translate</button>
+                        <button id="clearBtn" class="secondary-btn">Clear</button>
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <label for="outputText">Output</label>
+                    <textarea
+                        id="outputText"
+                        placeholder="Translation will appear here..."
+                        rows="6"
+                        readonly
+                    ></textarea>
+                    <div class="button-group">
+                        <button id="playBtn" class="primary-btn">
+                            <span class="play-icon">▶</span> Play Audio
+                        </button>
+                        <button id="copyBtn" class="secondary-btn">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visual-indicator" id="visualIndicator"></div>
+
+        <div class="reference-section">
+            <h2>Morse Code Reference</h2>
+            <div class="reference-tabs">
+                <button class="tab-btn active" data-tab="letters">Letters</button>
+                <button class="tab-btn" data-tab="numbers">Numbers</button>
+                <button class="tab-btn" data-tab="special">Special</button>
+            </div>
+
+            <div class="reference-content">
+                <div id="lettersTab" class="tab-content active">
+                    <div class="reference-grid" id="lettersGrid"></div>
+                </div>
+                <div id="numbersTab" class="tab-content">
+                    <div class="reference-grid" id="numbersGrid"></div>
+                </div>
+                <div id="specialTab" class="tab-content">
+                    <div class="reference-grid" id="specialGrid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>How to use</h3>
+            <ul>
+                <li><strong>Encode:</strong> Enter regular text and click Translate to convert to morse code</li>
+                <li><strong>Decode:</strong> Enter morse code (dots and dashes) with spaces between letters, and click Translate</li>
+                <li><strong>Play Audio:</strong> Listen to the morse code as audio beeps (dit and dah sounds)</li>
+                <li><strong>Format:</strong> Use dots (.) and dashes (-) for morse code input</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
