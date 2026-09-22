@@ -77,6 +77,18 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "$DEPLOY_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          # DEPLOY_DEST is the one setting a typo makes expensive: rsync would
+          # happily build a second copy of the site at the wrong path. Refuse
+          # anything that is not recognisably the site root.
+          if ! sshpass -e ssh \
+              -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+              "${DEPLOY_USER}@${DEPLOY_HOST}" \
+              "test -f '${DEPLOY_DEST}/index.html' && test -d '${DEPLOY_DEST}/apps'"; then
+            echo "::error::DEPLOY_DEST ($DEPLOY_DEST) has no index.html and apps/ - refusing to sync"
+            exit 1
+          fi
+          echo "destination looks like the site root"
+
           flags=(-avz --itemize-changes)
           if [ "${DRY_RUN:-false}" = "true" ]; then
             echo "::notice::dry run - nothing will be written"
