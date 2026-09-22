@@ -159,8 +159,8 @@ draft: false                           # Optional, set true to hide from publish
 
 ## Deployment
 
-Pushing to `master` builds the site and rsyncs it to DreamHost from GitHub
-Actions (`.github/workflows/deploy.yml`). Credentials are repository secrets
+Pushing to `master` builds the site and rsyncs it to the web host from
+GitHub Actions (`.github/workflows/deploy.yml`). Credentials are repository secrets
 (`DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PASSWORD`, `DEPLOY_DEST`,
 `DEPLOY_HOST_KEY`) rather than a local `secrets.toml`, so no laptop needs
 them. The workflow pins the Hugo version in its `env` block; keep that in step
