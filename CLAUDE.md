@@ -157,6 +157,28 @@ draft: false                           # Optional, set true to hide from publish
 ---
 ```
 
+## Deployment
+
+Pushing to `master` builds the site and rsyncs it to DreamHost from GitHub
+Actions (`.github/workflows/deploy.yml`). Credentials are repository secrets
+(`DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PASSWORD`, `DEPLOY_DEST`,
+`DEPLOY_HOST_KEY`) rather than a local `secrets.toml`, so no laptop needs
+them. The workflow pins the Hugo version in its `env` block; keep that in step
+with the version below.
+
+`deploy.py` still works for a manual deploy and reads `secrets.toml`, which is
+gitignored and not in the repository.
+
+To deploy without pushing, or to see what a deploy would change:
+
+```bash
+gh workflow run deploy.yml -f dry_run=true   # itemized list, writes nothing
+gh workflow run deploy.yml                   # deploy the current master
+```
+
+Neither path passes `--delete`, so a deploy only adds and overwrites; files on
+the server that the build does not produce are left alone.
+
 ## Important Notes
 
 - **Do not edit `public/`** - This directory is auto-generated and overwritten by `hugo` command
