@@ -1,0 +1,87 @@
+# Build the site and rsync it to DreamHost.
+#
+# This replaces running deploy.py from a laptop. The credentials it used to
+# read from a gitignored secrets.toml are repository secrets here:
+#
+#   DEPLOY_HOST      pdx1-shared-a1-44.dreamhost.com
+#   DEPLOY_USER      the shell user
+#   DEPLOY_PASSWORD  that user's SSH password
+#   DEPLOY_DEST      absolute path of the site root on the server
+#   DEPLOY_HOST_KEY  the server's public host key, in known_hosts format
+#
+# Unlike deploy.py this verifies the host key instead of turning verification
+# off, and like deploy.py it never passes --delete: the sync only adds and
+# overwrites, so anything already on the server that the build does not
+# produce is left alone.
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Show what would transfer, without writing anything
+        type: boolean
+        default: false
+
+# One deploy at a time, and never cancel one midway through an rsync.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  # Keep in step with the version named in CLAUDE.md. Output is version
+  # sensitive: 0.123.7 and 0.152.2 differ in the generator meta tag alone,
+  # but an older Hugo also drops the generated /apps/ page entirely.
+  HUGO_VERSION: 0.152.2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Hugo ${{ env.HUGO_VERSION }} extended
+        run: |
+          set -euo pipefail
+          base="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}"
+          tarball="hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          curl -sSLO "$base/$tarball"
+          curl -sSLO "$base/hugo_${HUGO_VERSION}_checksums.txt"
+          grep " ${tarball}\$" "hugo_${HUGO_VERSION}_checksums.txt" | sha256sum -c -
+          tar xzf "$tarball" hugo
+          sudo install -m 755 hugo /usr/local/bin/hugo
+          hugo version
+
+      - name: Build
+        run: |
+          set -euo pipefail
+          hugo
+          test -f public/index.html
+          test -f public/apps/index.html
+          test -f public/apps/scrabble/script.js
+
+      - name: Deploy
+        env:
+          SSHPASS: ${{ secrets.DEPLOY_PASSWORD }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_DEST: ${{ secrets.DEPLOY_DEST }}
+          DEPLOY_HOST_KEY: ${{ secrets.DEPLOY_HOST_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -qq -y sshpass
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_HOST_KEY" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          flags=(-avz --itemize-changes)
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            echo "::notice::dry run - nothing will be written"
+            flags+=(--dry-run)
+          fi
+          sshpass -e rsync "${flags[@]}" \
+            -e "ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            public/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DEST}"
