@@ -157,6 +157,30 @@ draft: false                           # Optional, set true to hide from publish
 ---
 ```
 
+## The one-page apps under /apps/
+
+Each app in `content/apps/` is a complete HTML document with front matter, and
+`layouts/apps/single.html` renders it as-is. Front matter (`title`,
+`description`, `icon`) also builds that app's card on the `/apps/` landing
+page, via `layouts/apps/list.html`.
+
+Their JavaScript and CSS live in `assets/apps/<app>/` and are referenced with
+the `asset` shortcode, which fingerprints them:
+
+```html
+<script src="{{< asset "apps/scrabble/script.js" >}}"></script>
+```
+
+That emits `/apps/scrabble/script.<sha256>.js`, so the URL changes whenever
+the file does and browsers refetch. Do not hand-write `?v=N` cache tokens;
+they break silently when someone edits a script and forgets to turn the
+number. A missing asset fails the build.
+
+Large runtime data the scripts fetch themselves - the word lists at
+`static/apps/{scrabble,anagrams}/words.txt` - stays in `static/`, because the
+scripts request it relative to the page URL. It is not fingerprinted, so a
+changed dictionary can be served stale for up to the host's max-age.
+
 ## Deployment
 
 Pushing to `master` builds the site and rsyncs it to the web host from

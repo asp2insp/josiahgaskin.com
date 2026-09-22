@@ -1,0 +1,19 @@
+{{- /*
+  Emit a content-hashed URL for a file under assets/, e.g.
+
+    <script src="{{< asset "apps/scrabble/script.js" >}}"></script>
+
+  The hash is the cache key, so editing the file changes the URL and every
+  browser refetches. This replaces hand-turned ?v=N tokens, which only work
+  when whoever edits the file remembers to turn them - and a forgotten token
+  serves month-old code from cache while the server holds the new file.
+
+  A missing file fails the build, rather than deploying a page whose script
+  404s.
+*/ -}}
+{{- $path := .Get 0 -}}
+{{- with resources.Get $path -}}
+  {{- (. | fingerprint "sha256").RelPermalink -}}
+{{- else -}}
+  {{- errorf "asset shortcode: no file at assets/%s (used by %s)" $path .Page.File.Path -}}
+{{- end -}}
