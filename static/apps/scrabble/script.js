@@ -119,7 +119,13 @@ function findWords() {
     }
 
     const letters = lettersInput.value.trim().toUpperCase();
-    const pattern = patternInput.value.trim().toUpperCase();
+    const typedPattern = patternInput.value.trim().toUpperCase();
+    // Bare letters read as "anywhere in the word": ING finds RING and SINGER
+    // rather than only the three-letter word. Type a . or a * to pin letters
+    // to positions instead.
+    const pattern = typedPattern && !/[.*]/.test(typedPattern)
+        ? `*${typedPattern}*`
+        : typedPattern;
 
     if (!letters) {
         alert('Please enter some letters');
